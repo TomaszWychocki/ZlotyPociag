@@ -21,7 +21,6 @@ int main(int argc, char* argv[])
 
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(w, h);
-	//glutFullScreen();
 	glutInitWindowPosition(0, 0);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -37,6 +36,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
+	glutFullScreen();
 	m_menu = new MainMenu();
 	//game = new Game();
 
@@ -86,7 +86,7 @@ void OnMove(int x, int y) {
 		mouseX = x;
 		mouseY = y;
 	}
-	//std::cout << "X:" << x << " Y:" << y << std::endl;
+	std::cout << "X:" << x << " Y:" << y << std::endl;
 }
 
 void onMouseButton(int button, int state, int x, int y) {
@@ -198,13 +198,11 @@ void OnTimer(int id) {
 	if (CurrentState == postLevel) {
 		if (wait > 0) wait--;
 	}
-}
 
-void OnRender() {
 	if (CurrentState == menu) {
 		m_menu->show();
 	}
-	else if(CurrentState == play) {
+	else if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
 			game->cleanMem();
@@ -226,7 +224,7 @@ void OnRender() {
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if(game->currentLevel > 5)
+		if (game->currentLevel > 5)
 			printText(20, 380, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
 		else if (game->level->curentPoints >= game->level->requiredPoints)
 			printText(20, 380, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
@@ -234,7 +232,7 @@ void OnRender() {
 			printText(80, 380, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 
 		if (wait == 0) {
-			if(game->currentLevel > 5)
+			if (game->currentLevel > 5)
 				glutLeaveMainLoop();
 			else {
 				cannonMenu = new CannonUpgradeMenu(game);
@@ -252,12 +250,30 @@ void OnRender() {
 	glutPostRedisplay();
 }
 
+void OnRender() {
+}
+
 void OnReshape(int width, int height) {
-	glutReshapeWindow(w, h);
+	//glutReshapeWindow(w, h);
 	//glMatrixMode(GL_PROJECTION);
 	//glLoadIdentity();
 	//glViewport(0, 0, width, height);
 	//gluPerspective(60.0f, (float)width / height, .01f, 100.0f);
-	//h = height;
-	//w = width;
+	h = height;
+	w = width;
+
+	const float aspectRatio = ((float)width) / height;
+	float xSpan = 1; // Feel free to change this to any xSpan you need.
+	float ySpan = 1; // Feel free to change this to any ySpan you need.
+
+	if (aspectRatio > 1) {
+		xSpan *= aspectRatio;
+	}
+	else {
+		ySpan = xSpan / aspectRatio;
+	}
+
+	gluPerspective(60, (double)width / (double)height, 0.01f, 100.0f);
+
+	glViewport(0, 0, width, height);
 }

@@ -47,12 +47,12 @@ MainMenu::~MainMenu(){
 }
 
 void MainMenu::show() {
-	glDisable(GL_DEPTH_TEST);
+	/*glDisable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glScalef(0.2, 0.2, 0.2);
+	//glScalef(0.2, 0.2, 0.2);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1, 1, 1);
 
@@ -81,24 +81,45 @@ void MainMenu::show() {
 	//glDisable(GL_TEXTURE_2D);
 
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glBindTexture(GL_TEXTURE_2D, MenuItemsTexture);
+	glEnable(GL_BLEND);*/
+	//glBindTexture(GL_TEXTURE_2D, MenuItemsTexture);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	glMatrixMode(GL_PROJECTION);
+	glColor3f(1, 1, 1);
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, width, 0, height);
+	glScalef(1, -1, 1);
+	glTranslatef(0, -height, 0);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
 	for (int i = 0; i<3; i++) {
-		glBegin(GL_QUADS);
-			/*glTexCoord2f(0.0f, 0.56f);*/  glVertex2f(polygons[i].x1, polygons[i].y1);
-			/*glTexCoord2f(0.0f, 1.0f);*/   glVertex2f(polygons[i].x1, polygons[i].y2);
-			/*glTexCoord2f(1.0f, 1.0f);*/   glVertex2f(polygons[i].x2, polygons[i].y2);
-			/*glTexCoord2f(1.0f, 0.56f);*/  glVertex2f(polygons[i].x2, polygons[i].y1);
+		glBegin(GL_LINE_LOOP);
+			/*glTexCoord2f(0.0f, 0.56f);*/  glVertex2f(polygons[i].xmin, polygons[i].ymin);
+			/*glTexCoord2f(0.0f, 1.0f);*/   glVertex2f(polygons[i].xmin, polygons[i].ymax);
+			/*glTexCoord2f(1.0f, 1.0f);*/   glVertex2f(polygons[i].xmax, polygons[i].ymax);
+			/*glTexCoord2f(1.0f, 0.56f);*/  glVertex2f(polygons[i].xmax, polygons[i].ymin);
 		glEnd();
 	}
 
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-
-	printText(glutGet(GLUT_WINDOW_WIDTH)/2 - 30, glutGet(GLUT_WINDOW_HEIGHT)/2 - 120, 10, "Start", 1, 0 ,0);
-	printText(glutGet(GLUT_WINDOW_WIDTH) / 2 - 130, glutGet(GLUT_WINDOW_HEIGHT) / 2 - 20, 10, "Najlepsze wyniki", 1, 0, 0);
-	printText(glutGet(GLUT_WINDOW_WIDTH) / 2 - 50, glutGet(GLUT_WINDOW_HEIGHT) / 2 + 75, 10, "Wyjscie", 1, 0, 0);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
 	glEnable(GL_LIGHTING);
+	glMatrixMode(GL_MODELVIEW);
+
+	/*glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);*/
+
+	printText(653, 264, 10, "Start", 1, 0 ,0);
+	printText(553, 364, 10, "Najlepsze wyniki", 1, 0, 0);
+	printText(633, 459, 10, "Wyjscie", 1, 0, 0);
 }
 
 int MainMenu::checkItems(int x, int y){
