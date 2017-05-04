@@ -1,0 +1,59 @@
+﻿  stdafx.cpp
+  Particle.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(20): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(21): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(26): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(27): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(52): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\particle.cpp(62): warning C4305: '+=': truncation from 'double' to 'float'
+  MainMenu.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\mainmenu.cpp(55): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\mainmenu.cpp(98): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\mainmenu.cpp(99): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\mainmenu.cpp(100): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Level.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\level.cpp(10): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\level.cpp(20): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  GKiW_Lab3.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(125): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(127): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(151): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(152): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(185): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(186): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(189): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\gkiw_lab3.cpp(191): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Game.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\game.cpp(57): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  FunctionsPack.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(15): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(20): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(24): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(46): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(53): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(54): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(55): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(56): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(57): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(58): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\functionspack.cpp(59): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  CannonUpgradeMenu.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\cannonupgrademenu.cpp(56): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\cannonupgrademenu.cpp(63): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\cannonupgrademenu.cpp(64): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\cannonupgrademenu.cpp(65): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\cannonupgrademenu.cpp(66): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+  Cannon.cpp
+  Bullet.cpp
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\bullet.cpp(17): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\wycho\documents\blender\zloty pociag\game\gkiw_lab3\bullet.cpp(51): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+Bullet.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+  GKiW_Lab3.vcxproj -> C:\Users\wycho\Documents\Blender\Zloty pociag\Game\Debug\GKiW_Lab3.exe
+  GKiW_Lab3.vcxproj -> C:\Users\wycho\Documents\Blender\Zloty pociag\Game\Debug\GKiW_Lab3.pdb (Full PDB)
+  C:\Users\wycho\Documents\Blender\Zloty pociag\Game\freeglut\bin\freeglut.dll
+          1 file(s) copied.
