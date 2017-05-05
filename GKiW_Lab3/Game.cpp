@@ -55,7 +55,7 @@ void Game::showScene() {
 		for (int j = -10; j <= 10; j += 2) {
 			glPushMatrix();
 				glTranslatef(i, 0.0f, j);
-				glutSolidCube(0.5f);
+				glutSolidSphere(0.5, 30, 30);
 			glPopMatrix();
 		}
 	}
@@ -197,9 +197,20 @@ void Game::loadLevel(int l) {
 	glShadeModel(GL_SMOOTH); // Wybor techniki cieniowania
 	glEnable(GL_LIGHT0); // Wlaczenie 0-go zrodla swiatla
 
-	this->player.pos.x = 1.0f;
+	float l1_amb[] = { 0.6f, 0.2f, 0.0f, 1.0f };
+	float l1_dif[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float l1_spe[] = { 0.2f, 0.2f, 0.2f, 0.2f };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, l1_amb);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, l1_dif);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, l1_spe);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 3.0f);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
+
+	this->level = new Level(l);
+
+	this->player.pos.x = level->sX;
 	this->player.pos.y = 0.0f;
-	this->player.pos.z = 8.0f;
+	this->player.pos.z = level->sZ;
 
 	this->player.dir.x = 0.0f;
 	this->player.dir.y = 0.0f;
@@ -210,7 +221,6 @@ void Game::loadLevel(int l) {
 	this->player.velM = 0;
 	this->player.velS = 0;
 
-	this->level = new Level(l);
 	this->timer = 0;
 	cannon->reloading = 0;
 }

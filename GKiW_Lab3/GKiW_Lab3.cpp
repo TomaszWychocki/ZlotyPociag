@@ -124,7 +124,15 @@ void onMouseButton(int button, int state, int x, int y) {
 				PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
 				game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
 				game->level->curentPoints++;
-				game->bullets.push_back(new Bullet(game->player.pos.x, game->player.pos.y, game->player.pos.z, game->player.dir.x, game->player.dir.y, game->player.dir.z, game->cannon->ballSpeed, verticalAngle, game->level->wind));
+				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
+													game->player.pos.y + game->player.dir.y * 1.2,
+													game->player.pos.z + game->player.dir.z * 1.2,
+													game->player.dir.x, 
+													game->player.dir.y, 
+													game->player.dir.z, 
+													game->cannon->ballSpeed, 
+													verticalAngle, 
+													game->level->wind));
 			}
 		}
 	}
@@ -144,6 +152,19 @@ void OnTimer(int id) {
 		verticalAngle += 0.15f  * float(glutGet(GLUT_WINDOW_HEIGHT) / 2 - mouseY);
 		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 
+		if (keystate['w']) {
+			verticalAngle += 0.5;
+		}
+		if (keystate['s']) {
+			verticalAngle -= 0.5;
+		}
+		if (keystate['a']) {
+			horizontalAngle += 0.5;
+		}
+		if (keystate['d']) {
+			horizontalAngle -= 0.5;
+		}
+
 		if (verticalAngle > 90) verticalAngle = 90;
 		if (verticalAngle < 0) verticalAngle = 0;
 
@@ -153,18 +174,19 @@ void OnTimer(int id) {
 
 		//std::cout << horizontalAngle << " " << verticalAngle << std::endl;
 
-		// Zmiana predkosci gracza jesli wcisniete W/S/A/D
-		if (keystate['w']) {
-			game->player.velM = game->player.speed;
-		}
-		if (keystate['s']) {
-			game->player.velM = -game->player.speed;
-		}
-		if (keystate['a']) {
-			game->player.velS = -game->player.speed;
-		}
-		if (keystate['d']) {
-			game->player.velS = game->player.speed;
+		if (game->cannon->reloading == 0 && keystate[' ']) {
+			PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
+			game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
+			game->level->curentPoints++;
+			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
+				game->player.pos.y + game->player.dir.y * 1.2,
+				game->player.pos.z + game->player.dir.z * 1.2,
+				game->player.dir.x,
+				game->player.dir.y,
+				game->player.dir.z,
+				game->cannon->ballSpeed,
+				verticalAngle,
+				game->level->wind));
 		}
 
 		// Znalezienie kierunku prostopadlego
@@ -172,27 +194,8 @@ void OnTimer(int id) {
 		per.x = -game->player.dir.z;
 		per.z = game->player.dir.x;
 
-		// Chodzenie przod/tyl
-		game->player.pos.x += game->player.dir.x * game->player.velM * .1f;
-		//player.pos.y += player.dir.y * player.velM * .1f;
-		game->player.pos.z += game->player.dir.z * game->player.velM * .1f;
-
-		// Chodzenie na boki
-		game->player.pos.x += per.x * game->player.velS * .1f;
-		game->player.pos.z += per.z * game->player.velS * .1f;
-
-		// Bezwladnosc - w kazdym cyklu maleje predkosc gracza
-		game->player.velM /= 1.2;
-		game->player.velS /= 1.2;
-
-		//Ruch swiatla
-		game->LightPos.x = 5 * cos(Tm / 500);
-		game->LightPos.y = 5;
-		game->LightPos.z = 5 * sin(Tm / 500);
-
 		if (game->cannon->reloading > 0)
 			game->cannon->reloading--;
-
 	}
 
 	if (CurrentState == postLevel) {
@@ -242,7 +245,6 @@ void OnTimer(int id) {
 	}
 	else if (CurrentState == cannonUpgrade) {
 		cannonMenu->show();
-		//std::cout << "hi";
 	}
 
 	glutSwapBuffers();

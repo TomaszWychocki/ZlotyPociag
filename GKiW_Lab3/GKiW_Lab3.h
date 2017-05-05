@@ -25,6 +25,7 @@ CannonUpgradeMenu* cannonMenu;
 Game* game;
 double Tm = 0.0;
 int wait = 0;
+int wait2 = 0;
 float rot = 0;
 
 int mouseX = 0, mouseY = 0;

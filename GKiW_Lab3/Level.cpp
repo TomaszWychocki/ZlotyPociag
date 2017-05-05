@@ -7,6 +7,8 @@ Level::Level(int n) {
 	requiredPoints = maxPoints[levelNumber - 1];
 	wind = windValues[levelNumber - 1];
 	maxTime = maxTimes[levelNumber - 1];
+	sX = startPosX[levelNumber - 1];
+	sZ = startPosZ[levelNumber - 1];
 	startTime = glutGet(GLUT_ELAPSED_TIME)/1000;
 	curentPoints = 0;
 	curentCash = 0;

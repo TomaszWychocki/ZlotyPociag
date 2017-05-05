@@ -18,6 +18,10 @@ Bullet::Bullet(float Sx, float Sy, float Sz, float Dx, float Dy, float Dz, float
 	state.speed = speed / 12.0f;
 	state.wind = wind;
 	std::cout << state.angle << std::endl;
+
+	float l1_pos[] = { state.pos.x, state.pos.y, state.pos.z, 1.0f };
+	glLightfv(GL_LIGHT1, GL_POSITION, l1_pos);
+	glEnable(GL_LIGHT1);
 }
 
 Bullet::~Bullet(){
@@ -27,17 +31,20 @@ Bullet::~Bullet(){
 void Bullet::show(){
 	glPushMatrix();
 		glTranslatef(state.pos.x, state.pos.y, state.pos.z);
-		glutSolidSphere(0.3, 30, 30);
+		glutSolidSphere(0.1, 30, 30);
 	glPopMatrix();
 
 	move();
 }
 
 void Bullet::move(){
-	state.pos.x += state.dir.x * state.speed;
-	state.pos.y = getYParameter();
-	state.pos.z += state.dir.z * state.speed + (state.wind * t);
+	state.pos.x += state.dir.x * state.speed * 0.7;
+	state.pos.y = getYParameter() * 0.7;
+	state.pos.z += (state.dir.z * state.speed + (state.wind * t)) * 0.7;
 	t += 1;
+
+	if (t > 6)
+		glDisable(GL_LIGHT1);
 	//std::cout << state.pos.x << " " << state.pos.y << " " << state.pos.z << " " << std::endl;
 }
 
@@ -48,5 +55,5 @@ float Bullet::getDistance(vec3 a, vec3 b) {
 float Bullet::getYParameter() {
 	float dist = t;
 	//std::cout << dist << std::endl;
-	return ((tan(state.angle)*dist) - ((9.8*pow(dist, 2)) / (2 * pow(state.speed*80, 2)*pow(cos(state.angle),2)))) + startPosition.y;
+	return ((tan(state.angle)*dist) - ((9.8*pow(dist, 2)) / (2 * pow(state.speed*80, 2)*pow(cos(state.angle),2)))) + startPosition.y + state.dir.y;
 }
