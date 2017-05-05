@@ -209,7 +209,7 @@ void Game::loadLevel(int l) {
 	this->level = new Level(l);
 
 	this->player.pos.x = level->sX;
-	this->player.pos.y = 0.0f;
+	this->player.pos.y = 10.0f;
 	this->player.pos.z = level->sZ;
 
 	this->player.dir.x = 0.0f;

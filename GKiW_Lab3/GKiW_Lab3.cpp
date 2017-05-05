@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	glutFullScreen();
+	//glutFullScreen();
 	m_menu = new MainMenu();
 	//game = new Game();
 

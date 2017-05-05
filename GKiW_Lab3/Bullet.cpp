@@ -39,7 +39,7 @@ void Bullet::show(){
 
 void Bullet::move(){
 	state.pos.x += state.dir.x * state.speed * 0.7;
-	state.pos.y = getYParameter() * 0.7;
+	state.pos.y = getYParameter(); // *0.7
 	state.pos.z += (state.dir.z * state.speed + (state.wind * t)) * 0.7;
 	t += 1;
 
