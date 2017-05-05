@@ -7,13 +7,9 @@ Particle::Particle(float x, float y, float z){
 	startPos.y = y;
 	startPos.z = z;
 
-	//for (int i = 0; i < 100; i++) {
-	//	float Theta = (rand() / (RAND_MAX / 6.28));
-	//	float Phi = -1.57 + (rand() / (RAND_MAX / 3.14));
-	//	par[i].x = 0.01f * cos(Theta) * sin(Phi);
-	//	par[i].y = 0.01f * sin(Theta) * sin(Phi);
-	//	par[i].z = 0.01f * cos(Phi);
-	//}
+	angle.x = randMToN(0, 360);
+	angle.y = randMToN(0, 360);
+	angle.z = randMToN(0, 360);
 
 	float theta = 0, phi = 0;
 	int i = 0;
@@ -47,6 +43,12 @@ void Particle::show(){
 		glEnable(GL_BLEND); 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+		glPushMatrix();
+		glTranslatef(startPos.x, startPos.y, startPos.z);
+		glRotatef(angle.x, 1, 0, 0);
+		glRotatef(angle.y, 0, 1, 0);
+		glRotatef(angle.z, 0, 0, 1);
+		glTranslatef(-startPos.x, -startPos.y, -startPos.z);
 		for (int i = 0; i < 100; i++) {
 			glPushMatrix();
 				glColor4f(color[i].x, color[i].y, color[i].z, (0.3 - Offset) / 0.3);
@@ -54,6 +56,7 @@ void Particle::show(){
 				glutSolidSphere(0.04, 5, 5);
 			glPopMatrix();
 		}
+		glPopMatrix();
 
 		glEnable(GL_LIGHTING);
 		glDisable(GL_BLEND);

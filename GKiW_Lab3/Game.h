@@ -27,6 +27,7 @@ public:
 	bool checkTime();
 	void loadLevel(int);
 	void cleanMem();
+	void minusHP();
 
 	SCameraState player;
 	vec3 LightPos;
@@ -37,6 +38,7 @@ public:
 	int currentLevel = 1;
 	int points;
 	int cash;
+	int hp = 100;
 
 	std::vector < Bullet* > bullets;
 	std::vector < Particle* > particles;

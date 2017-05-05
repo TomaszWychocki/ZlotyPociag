@@ -217,6 +217,10 @@ void OnTimer(int id) {
 			}
 			wait = 117;
 		}
+		else if (game->hp <= 0) {
+			CurrentState = postLevel;
+			game->cleanMem();
+		}
 		else
 			game->showScene();
 	}
@@ -231,11 +235,13 @@ void OnTimer(int id) {
 			printText(20, 380, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
 		else if (game->level->curentPoints >= game->level->requiredPoints)
 			printText(20, 380, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
+		else if (game->hp <= 0)
+			printText(20, 380, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
 		else
 			printText(80, 380, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 
 		if (wait == 0) {
-			if (game->currentLevel > 5)
+			if (game->currentLevel > 5 || game->hp <= 0)
 				glutLeaveMainLoop();
 			else {
 				cannonMenu = new CannonUpgradeMenu(game);

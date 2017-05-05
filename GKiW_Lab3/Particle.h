@@ -17,5 +17,6 @@ private:
 	vec3 startPos;
 	vec3 par[100];
 	vec3 color[100];
+	vec3 angle;
 };
 

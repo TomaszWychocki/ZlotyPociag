@@ -103,7 +103,7 @@ void Game::showScene() {
 	}
 	else {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
-		printText(20, 40, 10, "Zdrowie: 100%", 1, 1, 1);
+		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
 		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
 	}
@@ -233,4 +233,8 @@ void Game::cleanMem(){
 	for (size_t i = 0; i < bullets.size(); i++)
 		delete bullets[i];
 	bullets.clear();
+}
+
+void Game::minusHP(){
+	hp -= rand() % (15 - 10 + 1) + 10;
 }
