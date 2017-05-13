@@ -6,7 +6,7 @@
 Game::Game() {
 	points = 0;
 	cash = 200;
-
+	this->model = new Model();
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 }
@@ -59,6 +59,10 @@ void Game::showScene() {
 			glPopMatrix();
 		}
 	}
+
+	glPushMatrix();
+		model->Render();
+	glPopMatrix();
 
 	//Kule
 	for (size_t i = 0; i < bullets.size(); i++) {
@@ -209,7 +213,7 @@ void Game::loadLevel(int l) {
 	this->level = new Level(l);
 
 	this->player.pos.x = level->sX;
-	this->player.pos.y = 10.0f;
+	this->player.pos.y = 0.0f;
 	this->player.pos.z = level->sZ;
 
 	this->player.dir.x = 0.0f;

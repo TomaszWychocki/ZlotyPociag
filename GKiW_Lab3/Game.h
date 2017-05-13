@@ -4,6 +4,7 @@
 #include "Particle.h"
 #include <vector>
 #include "FunctionsPack.h"
+#include "Model.h"
 
 class Game
 {
@@ -45,5 +46,6 @@ public:
 
 private:
 	int timer;
+	Model *model;
 };
 
