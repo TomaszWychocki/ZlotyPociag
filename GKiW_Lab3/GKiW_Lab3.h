@@ -1,4 +1,3 @@
-// Deklaracje funkcji u¿ywanych jako obs³uga zdarzeñ GLUT-a.
 void OnRender();
 void OnReshape(int, int);
 void OnKeyPress(unsigned char, int, int);

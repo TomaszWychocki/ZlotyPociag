@@ -1,9 +1,13 @@
 #pragma once
+#include "Model.h"
+
 class Cannon
 {
 public:
 	Cannon();
 	~Cannon();
+	void Render();
+	Model *model;
 	int fireRate = 6;
 	int ballPower = 20;
 	int ballSpeed = 7;

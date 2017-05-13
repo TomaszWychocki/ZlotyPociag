@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,7 +14,7 @@
 
 class Model {
 public:
-	Model();
+	Model(std::string name);
 	~Model();
 	void Render();
 	bool Import3DFromFile(const std::string & pFile);
@@ -26,7 +27,7 @@ public:
 	void recursive_render(const aiScene * sc, const aiNode * nd, float scale);
 
 private:
-	std::string modelpath = "models/terrain.obj";
+	std::string modelpath;
 	const aiScene* scene = NULL;
 	GLuint scene_list = 0;
 	std::map<std::string, GLuint*> textureIdMap;

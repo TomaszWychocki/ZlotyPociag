@@ -21,8 +21,8 @@ private:
 	int maxTimes[5] = { 30,25,20,20,50 };
 	int maxPoints[5] = { 1,2,3,4,5 };
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };
-	float startPosX[5] = { 13, 2, 3, 5, 4 };
-	float startPosZ[5] = { 13, 3, 5, 4, 2 };
+	float startPosX[5] = { -2, 2, 3, 5, 4 };
+	float startPosZ[5] = { 7, 3, 5, 4, 2 };
 	float startTime;
 };
 

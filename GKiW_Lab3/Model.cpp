@@ -1,16 +1,24 @@
 ﻿#include "stdafx.h"
 #include "Model.h"
 
-Model::Model() {
+Model::Model(std::string name) {
+	modelpath = "models/" + name;
 	Import3DFromFile(modelpath);
 	LoadGLTextures(scene);
 }
 
 Model::~Model() {
+	textureIdMap.clear();
+	if (textureIds) {
+		delete[] textureIds;
+		textureIds = NULL;
+	}
 }
 
 void Model::Render() {
+	glEnable(GL_TEXTURE_2D);
 	recursive_render(scene, scene->mRootNode, 0.5);
+	glDisable(GL_TEXTURE_2D);
 }
 
 bool Model::Import3DFromFile(const std::string& pFile) {

@@ -6,7 +6,6 @@
 Game::Game() {
 	points = 0;
 	cash = 200;
-	this->model = new Model();
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 }
@@ -30,9 +29,9 @@ void Game::showScene() {
 #pragma region Swiatlo_0
 
 	float l0_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	float l0_dif[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	float l0_spe[] = { 0.2f, 0.2f, 0.2f, 0.2f };
-	float l0_pos[] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	float l0_dif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	float l0_spe[] = { 0.5f, 0.5f, 0.5f, 0.2f };
+	float l0_pos[] = { 0.0f, 30.0f, 0.0f, 1.0f };
 	float lightDir[3] = { this->player.dir.x, this->player.dir.y, this->player.dir.z };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_amb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_dif);
@@ -41,32 +40,28 @@ void Game::showScene() {
 
 #pragma endregion
 
-#pragma region Szesciany
-
-	float m0_amb[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	float m0_dif[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	float m0_spe[] = { 0.2f, 0.2f, 0.2f, 0.2f };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, m0_amb);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, m0_dif);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, m0_spe);
-	glMaterialf(GL_FRONT, GL_SHININESS, 0.2f);
-
-	for (int i = -10; i <= 10; i += 2) {
-		for (int j = -10; j <= 10; j += 2) {
-			glPushMatrix();
-				glTranslatef(i, 0.0f, j);
-				glutSolidSphere(0.5, 30, 30);
-			glPopMatrix();
-		}
-	}
+#pragma region Scena
 
 	glPushMatrix();
-		model->Render();
+//		terrain->Render();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
+		glRotatef(hAngle-90, 0, 1, 0);
+		glRotatef(vAngle, 0, 0, 1);
+		cannon->Render();
+	glPopMatrix();
+
+	timer2 -= 0.1;
+	glPushMatrix();
+		glTranslatef(timer2/10, -2.0f, 0.0f);
+		train->Render();
 	glPopMatrix();
 
 	//Kule
 	for (size_t i = 0; i < bullets.size(); i++) {
-		if (bullets[i]->state.pos.y < -0.25f) {
+		if (bullets[i]->state.pos.y < 0.1f) {
 			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
 			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
 			delete bullets[i];
@@ -85,16 +80,6 @@ void Game::showScene() {
 		else
 			particles[i]->show();
 	}
-
-	float m1_amb[] = { 0.5f, 1.0f, 0.0f, 1.0f };
-	float m1_dif[] = { 0.5f, 0.0f, 0.0f, 1.0f };
-	glMaterialfv(GL_FRONT, GL_AMBIENT, m1_amb);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, m1_dif);
-	glPushMatrix();
-	glTranslatef(0, -0.5f, 0);
-	glScalef(40.0f, 1.0f, 40.0f);
-	glutSolidCube(0.5f);
-	glPopMatrix();
 
 	drawViewfinder();
 #pragma endregion
@@ -187,6 +172,7 @@ bool Game::checkTime(){
 }
 
 void Game::loadLevel(int l) {
+	glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glMatrixMode(GL_PROJECTION);
@@ -210,11 +196,16 @@ void Game::loadLevel(int l) {
 	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 3.0f);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
 
+	this->terrain = new Model("Train_blue.3ds");
+	this->train = new Model("Train.3ds");
 	this->level = new Level(l);
 
-	this->player.pos.x = level->sX;
-	this->player.pos.y = 0.0f;
-	this->player.pos.z = level->sZ;
+	//this->player.pos.x = level->sX;
+	//this->player.pos.y = 0.0f;
+	//this->player.pos.z = level->sZ;
+	this->player.pos.x = -2;
+	this->player.pos.y = 0.3f;
+	this->player.pos.z = 7;
 
 	this->player.dir.x = 0.0f;
 	this->player.dir.y = 0.0f;
@@ -226,6 +217,7 @@ void Game::loadLevel(int l) {
 	this->player.velS = 0;
 
 	this->timer = 0;
+	this->timer2 = 0;
 	cannon->reloading = 0;
 }
 
@@ -237,6 +229,9 @@ void Game::cleanMem(){
 	for (size_t i = 0; i < bullets.size(); i++)
 		delete bullets[i];
 	bullets.clear();
+
+	delete terrain;
+	delete train;
 }
 
 void Game::minusHP(){

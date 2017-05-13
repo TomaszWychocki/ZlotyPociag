@@ -168,6 +168,9 @@ void OnTimer(int id) {
 		if (verticalAngle > 90) verticalAngle = 90;
 		if (verticalAngle < 0) verticalAngle = 0;
 
+		game->hAngle = horizontalAngle;
+		game->vAngle = verticalAngle;
+
 		game->player.dir.x = cos(verticalAngle*3.14 / 180) * sin(horizontalAngle*3.14 / 180);
 		game->player.dir.y = sin(verticalAngle*3.14 / 180);
 		game->player.dir.z = cos(verticalAngle*3.14 / 180) * cos(horizontalAngle*3.14 / 180);
@@ -208,6 +211,8 @@ void OnTimer(int id) {
 	else if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
+			glDisable(GL_TEXTURE_2D);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			game->cleanMem();
 			game->cash += game->level->curentCash;
 			game->cash += (int)(game->level->curentPoints * 0.6);

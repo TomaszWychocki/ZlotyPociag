@@ -40,12 +40,16 @@ public:
 	int points;
 	int cash;
 	int hp = 100;
+	float hAngle;
+	float vAngle;
 
 	std::vector < Bullet* > bullets;
 	std::vector < Particle* > particles;
 
 private:
 	int timer;
-	Model *model;
+	float timer2;
+	Model *terrain;
+	Model *train;
 };
 
