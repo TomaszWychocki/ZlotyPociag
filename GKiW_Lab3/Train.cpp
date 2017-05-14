@@ -37,11 +37,11 @@ void Train::Render() {
 	}
 
 	if (dir) {
-		if (timer <= -390 && HP > 0)
+		if (timer <= -160 && HP > 0)
 			setRandomTrain();
 	}
 	else {
-		if (timer >= 400 && HP > 0)
+		if (timer >= 160 && HP > 0)
 			setRandomTrain();
 	}
 
@@ -49,11 +49,46 @@ void Train::Render() {
 		timer -= speed;
 	else
 		timer += speed;
-	std::cout << timer << std::endl;
 	posX = (timer / 10);
+	std::cout << timer << std::endl;
 
-	glScalef(0.35f, 0.35f, 0.35f);
 	glTranslatef(posX, posY, 0.0f);
+	if (isBoss) {
+		glPushMatrix();
+			float a;
+			if (dir) {
+				glTranslatef(3.23f, 1.1f, 0.0f);
+				a = atan2f(playerPosX - (posX + 3.23f), playerPosZ);
+			}
+			else {
+				glTranslatef(-3.23f, 1.1f, 0.0f);
+				a = atan2f(playerPosX - (posX - 3.23f), playerPosZ);
+			}
+			a = a * 180 / 3.1415;
+			glRotatef(a, 0, 1, 0);
+			trainCannon->Render();
+
+			if (abs(timer - 20) <= 0.5f || abs(timer - 0) <= 0.5f) {
+				if (dir) {
+					shootDir.x = playerPosX - (posX + 3.23f);
+					startPos.x = posX + 3.23f;
+				}
+				else {
+					shootDir.x = playerPosX - (posX - 3.23f);
+					startPos.x = posX - 3.23f;
+				}
+				shootDir.y = -0.37f;
+				startPos.y = 0.7f;
+				shootDir.z = playerPosZ;
+				startPos.z = 0;
+				float l = sqrt(shootDir.x*shootDir.x + shootDir.y*shootDir.y + shootDir.z*shootDir.z);
+				shootDir.x /= l;
+				shootDir.y /= l;
+				shootDir.z /= l;
+				bulletReady = true;
+			}
+		glPopMatrix();
+	}
 	if (!dir)
 		glRotatef(180.0f, 0, 1, 0);
 	trains[currentTrain]->Render();
@@ -62,7 +97,7 @@ void Train::Render() {
 void Train::setDefault() {
 	dir = false;
 	isDead = false;
-	if (isBoss) HP = 500;	
+	if (isBoss) HP = 1000;	
 	setRandomTrain();
 }
 
@@ -78,13 +113,14 @@ void Train::setRandomTrain() {
 	if (isBoss) currentTrain = 3;
 
 	posX = 0;
-	posY = 0.4f;
+	posY = -0.43f;
 	dir = !dir;
 	if (!isBoss) HP = 100;
 	isDead = false;
+	bulletReady = false;
 
 	if (dir)
-		timer = 230;
+		timer = 70;
 	else
-		timer = -240;
+		timer = -60;
 }

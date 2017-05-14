@@ -67,7 +67,7 @@ void Game::showScene() {
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 		}
-		else if (bullets[i]->state.pos.z <= 0) { //SYMULOWANA KOLIZJA (POPRWAWIC)
+		else if (bullets[i]->state.pos.z <= 0 && bullets[i]->state.angle < 900.0f) { //SYMULOWANA KOLIZJA (POPRWAWIC)
 			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
 			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
 			delete bullets[i];
@@ -75,8 +75,23 @@ void Game::showScene() {
 			train->HP -= ((cannon->ballPower * 3.3f) + rand()%20);
 			if (train->HP < 0) train->HP = 0;
 		}
+		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
+			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.5f) {
+			//particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
+			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
+			delete bullets[i];
+			bullets.erase(bullets.begin() + i);
+			minusHP();
+			if (hp < 0) hp = 0;
+		}
 		else
 			bullets[i]->show();
+	}
+
+	if (train->bulletReady) {
+		bullets.push_back(new Bullet(train->startPos.x, train->startPos.y, train->startPos.z,
+			train->shootDir.x, train->shootDir.y, train->shootDir.z, 7.0f, 999.0f, 0.0f));
+		train->bulletReady = false;
 	}
 
 	//Particles
@@ -192,7 +207,9 @@ void Game::cannnonUpgradeClicked(int opt) {
 }
 
 bool Game::checkTime(){
-	//return false; //Usun
+	if (currentLevel == 5 && level->curentPoints > 0)
+		return true;
+
 	if (currentLevel == 5)
 		return false;
 
@@ -229,9 +246,9 @@ void Game::loadLevel(int l) {
 
 	this->level = new Level(l);
 	if (l == 5)
-		train->isBoss == true;
+		train->isBoss = true;
 	else
-		train->isBoss == false;
+		train->isBoss = false;
 
 	train->speed = level->trainSpeed;
 	train->setDefault();
@@ -239,9 +256,11 @@ void Game::loadLevel(int l) {
 	//this->player.pos.x = level->sX;
 	//this->player.pos.y = 0.0f;
 	//this->player.pos.z = level->sZ;
-	this->player.pos.x = -2;
+	this->player.pos.x = 2;
 	this->player.pos.y = 0.3f;
-	this->player.pos.z = 2;
+	this->player.pos.z = 10;
+	train->playerPosX = player.pos.x;
+	train->playerPosZ = player.pos.z;
 
 	this->player.dir.x = 0.0f;
 	this->player.dir.y = 0.0f;
@@ -267,5 +286,5 @@ void Game::cleanMem(){
 }
 
 void Game::minusHP(){
-	hp -= rand() % (15 - 10 + 1) + 10;
+	hp -= rand() % (5 - 1 + 1) + 1;
 }

@@ -18,10 +18,12 @@ public:
 
 	BulletState state;
 	void show();
+	static float getDistance(float ax, float ay, float az, float bx, float by, float bz) {
+		return sqrt(pow(bx - ax, 2) + pow(by - ay, 2) + pow(bz - az, 2));
+	}
 
 private:
 	void move();
-	float getDistance(vec3, vec3);
 	float getYParameter();
 	vec3 startPosition;
 	float t = 0;

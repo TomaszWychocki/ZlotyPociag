@@ -3,6 +3,10 @@
 
 class Train
 {
+	struct vec3 {
+		float x, y, z;
+	};
+
 public:
 	Train(float s, bool isBoss);
 	~Train();
@@ -12,7 +16,12 @@ public:
 	float HP;
 	float speed;
 	bool isBoss;
+	bool bulletReady;
 	int number;
+	float playerPosX;
+	float playerPosZ;
+	vec3 shootDir;
+	vec3 startPos;
 
 private:
 	Model *trains[4]; //Normal, blue, green, gold

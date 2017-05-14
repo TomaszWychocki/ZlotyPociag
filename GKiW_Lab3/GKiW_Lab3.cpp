@@ -224,9 +224,11 @@ void OnTimer(int id) {
 				game->points += game->level->curentPoints;
 				game->currentLevel++;
 			}
-			wait = 117;
+			wait = 200;
 		}
 		else if (game->hp <= 0) {
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			wait = 200;
 			CurrentState = postLevel;
 			game->cleanMem();
 		}
@@ -280,8 +282,8 @@ void OnReshape(int width, int height) {
 	w = width;
 
 	const float aspectRatio = ((float)width) / height;
-	float xSpan = 1; // Feel free to change this to any xSpan you need.
-	float ySpan = 1; // Feel free to change this to any ySpan you need.
+	float xSpan = 1;
+	float ySpan = 1;
 
 	if (aspectRatio > 1) {
 		xSpan *= aspectRatio;
