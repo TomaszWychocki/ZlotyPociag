@@ -28,5 +28,5 @@ int wait2 = 0;
 float rot = 0;
 
 int mouseX = 0, mouseY = 0;
-float horizontalAngle = 3.14f;
+float horizontalAngle = 0.0f;
 float verticalAngle = 0.0f;

@@ -17,6 +17,8 @@ public:
 	Model(std::string name);
 	~Model();
 	void Render();
+
+private:
 	bool Import3DFromFile(const std::string & pFile);
 	std::string getBasePath(const std::string & path);
 	int LoadGLTextures(const aiScene * scene);
@@ -25,8 +27,6 @@ public:
 	void color4_to_float4(const aiColor4D * c, float f[4]);
 	void apply_material(const aiMaterial * mtl);
 	void recursive_render(const aiScene * sc, const aiNode * nd, float scale);
-
-private:
 	std::string modelpath;
 	const aiScene* scene = NULL;
 	GLuint scene_list = 0;

@@ -6,6 +6,8 @@
 Game::Game() {
 	points = 0;
 	cash = 200;
+	this->terrain = new Model("terrain.3ds");
+	train = new Train(0, false);
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 }
@@ -43,7 +45,7 @@ void Game::showScene() {
 #pragma region Scena
 
 	glPushMatrix();
-//		terrain->Render();
+		terrain->Render();
 	glPopMatrix();
 
 	glPushMatrix();
@@ -53,9 +55,7 @@ void Game::showScene() {
 		cannon->Render();
 	glPopMatrix();
 
-	timer2 -= 0.1;
 	glPushMatrix();
-		glTranslatef(timer2/10, -2.0f, 0.0f);
 		train->Render();
 	glPopMatrix();
 
@@ -66,6 +66,14 @@ void Game::showScene() {
 			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
+		}
+		else if (bullets[i]->state.pos.z <= 0) { //SYMULOWANA KOLIZJA (POPRWAWIC)
+			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
+			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
+			delete bullets[i];
+			bullets.erase(bullets.begin() + i);
+			train->HP -= ((cannon->ballPower * 3.3f) + rand()%20);
+			if (train->HP < 0) train->HP = 0;
 		}
 		else
 			bullets[i]->show();
@@ -81,6 +89,26 @@ void Game::showScene() {
 			particles[i]->show();
 	}
 
+	//Pociag
+	if (train->number != -1) {
+		if (train->number == 0) {
+			level->curentPoints += level->trainPoint;
+			level->curentCash += 50;
+		}
+		else if (train->number == 1) {
+			level->curentPoints -= level->trainPoint * 0.5;
+			level->curentCash -= 100;
+		}
+		else if (train->number == 2) {
+			level->curentPoints += level->trainPoint;
+			level->curentCash += 150;
+		}
+		else if (train->number == 3) {
+			level->curentPoints += level->trainPoint;
+		}
+		train->number = -1;
+	}
+
 	drawViewfinder();
 #pragma endregion
 
@@ -89,12 +117,14 @@ void Game::showScene() {
 		printText(20, 40, 10, "Czas: " + std::to_string(level->getRemainingTime()), 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
 		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 	else {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
 		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
 		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 
 	if (this->cannon->reloading > 0) {
@@ -162,6 +192,7 @@ void Game::cannnonUpgradeClicked(int opt) {
 }
 
 bool Game::checkTime(){
+	//return false; //Usun
 	if (currentLevel == 5)
 		return false;
 
@@ -196,16 +227,21 @@ void Game::loadLevel(int l) {
 	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 3.0f);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
 
-	this->terrain = new Model("Train_blue.3ds");
-	this->train = new Model("Train.3ds");
 	this->level = new Level(l);
+	if (l == 5)
+		train->isBoss == true;
+	else
+		train->isBoss == false;
+
+	train->speed = level->trainSpeed;
+	train->setDefault();
 
 	//this->player.pos.x = level->sX;
 	//this->player.pos.y = 0.0f;
 	//this->player.pos.z = level->sZ;
 	this->player.pos.x = -2;
 	this->player.pos.y = 0.3f;
-	this->player.pos.z = 7;
+	this->player.pos.z = 2;
 
 	this->player.dir.x = 0.0f;
 	this->player.dir.y = 0.0f;
@@ -217,7 +253,6 @@ void Game::loadLevel(int l) {
 	this->player.velS = 0;
 
 	this->timer = 0;
-	this->timer2 = 0;
 	cannon->reloading = 0;
 }
 
@@ -229,9 +264,6 @@ void Game::cleanMem(){
 	for (size_t i = 0; i < bullets.size(); i++)
 		delete bullets[i];
 	bullets.clear();
-
-	delete terrain;
-	delete train;
 }
 
 void Game::minusHP(){

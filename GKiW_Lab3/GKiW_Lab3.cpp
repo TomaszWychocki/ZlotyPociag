@@ -86,7 +86,7 @@ void OnMove(int x, int y) {
 		mouseX = x;
 		mouseY = y;
 	}
-	std::cout << "X:" << x << " Y:" << y << std::endl;
+	//std::cout << "X:" << x << " Y:" << y << std::endl;
 }
 
 void onMouseButton(int button, int state, int x, int y) {
@@ -96,6 +96,9 @@ void onMouseButton(int button, int state, int x, int y) {
 			case 0:
 				game = new Game();
 				CurrentState = play;
+				glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+				horizontalAngle = 160.0f;
+				verticalAngle = 0;
 				delete m_menu;
 				break;
 			case 1:
@@ -113,6 +116,9 @@ void onMouseButton(int button, int state, int x, int y) {
 				game->cannnonUpgradeClicked(o);
 				if (o == 4) {
 					delete cannonMenu;
+					glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+					horizontalAngle = 160.0f;
+					verticalAngle = 0;
 					CurrentState = play;
 				}
 			}
@@ -123,10 +129,9 @@ void onMouseButton(int button, int state, int x, int y) {
 			if (true) { //game->cannon->reloading == 0
 				PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
 				game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
-				game->level->curentPoints++;
-				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
-													game->player.pos.y + game->player.dir.y * 1.2,
-													game->player.pos.z + game->player.dir.z * 1.2,
+				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
+													game->player.pos.y + game->player.dir.y * 1.2f,
+													game->player.pos.z + game->player.dir.z * 1.2f,
 													game->player.dir.x, 
 													game->player.dir.y, 
 													game->player.dir.z, 
@@ -180,7 +185,6 @@ void OnTimer(int id) {
 		if (game->cannon->reloading == 0 && keystate[' ']) {
 			PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
 			game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
-			game->level->curentPoints++;
 			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
 				game->player.pos.y + game->player.dir.y * 1.2,
 				game->player.pos.z + game->player.dir.z * 1.2,

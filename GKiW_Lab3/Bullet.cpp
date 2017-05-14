@@ -17,7 +17,7 @@ Bullet::Bullet(float Sx, float Sy, float Sz, float Dx, float Dy, float Dz, float
 	state.angle *= 3.1415 / 180;
 	state.speed = speed / 12.0f;
 	state.wind = wind;
-	std::cout << state.angle << std::endl;
+	//std::cout << state.angle << std::endl;
 
 	float l1_pos[] = { state.pos.x, state.pos.y, state.pos.z, 1.0f };
 	glLightfv(GL_LIGHT1, GL_POSITION, l1_pos);
@@ -43,7 +43,7 @@ void Bullet::move(){
 	state.pos.z += (state.dir.z * state.speed + (state.wind * t)) * 0.7;
 	t += 1;
 
-	if (t > 6)
+	if (t > 5)
 		glDisable(GL_LIGHT1);
 	//std::cout << state.pos.x << " " << state.pos.y << " " << state.pos.z << " " << std::endl;
 }
@@ -53,7 +53,5 @@ float Bullet::getDistance(vec3 a, vec3 b) {
 }
 
 float Bullet::getYParameter() {
-	float dist = t;
-	//std::cout << dist << std::endl;
-	return ((tan(state.angle)*dist) - ((9.8*pow(dist, 2)) / (2 * pow(state.speed*80, 2)*pow(cos(state.angle),2)))) + startPosition.y + state.dir.y;
+	return ((tan(state.angle)*t) - ((9.8*pow(t, 2)) / (2 * pow(state.speed*80, 2)*pow(cos(state.angle),2)))) + startPosition.y + state.dir.y;
 }

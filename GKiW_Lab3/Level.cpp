@@ -9,6 +9,8 @@ Level::Level(int n) {
 	maxTime = maxTimes[levelNumber - 1];
 	sX = startPosX[levelNumber - 1];
 	sZ = startPosZ[levelNumber - 1];
+	trainSpeed = tSpeed[levelNumber - 1];
+	trainPoint = trainPoints[levelNumber - 1];
 	startTime = glutGet(GLUT_ELAPSED_TIME)/1000;
 	curentPoints = 0;
 	curentCash = 0;
