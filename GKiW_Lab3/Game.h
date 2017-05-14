@@ -17,7 +17,6 @@ class Game
 		vec3 pos;
 		vec3 dir;
 		float speed;
-		float velM, velS;
 		float velRY, velRX;
 	};
 
@@ -37,7 +36,7 @@ public:
 	Level *level;
 	Cannon *cannon;
 	std::string message = "";
-	int currentLevel = 5;
+	int currentLevel = 1;
 	int points;
 	int cash;
 	int hp = 100;

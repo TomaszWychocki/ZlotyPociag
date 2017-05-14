@@ -253,12 +253,9 @@ void Game::loadLevel(int l) {
 	train->speed = level->trainSpeed;
 	train->setDefault();
 
-	//this->player.pos.x = level->sX;
-	//this->player.pos.y = 0.0f;
-	//this->player.pos.z = level->sZ;
-	this->player.pos.x = 2;
+	this->player.pos.x = level->sX;
 	this->player.pos.y = 0.3f;
-	this->player.pos.z = 10;
+	this->player.pos.z = level->sZ;
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
 
@@ -268,8 +265,8 @@ void Game::loadLevel(int l) {
 
 	this->player.speed = 0.5f;
 
-	this->player.velM = 0;
-	this->player.velS = 0;
+	this->player.velRX = 0;
+	this->player.velRY = 0;
 
 	this->timer = 0;
 	cannon->reloading = 0;

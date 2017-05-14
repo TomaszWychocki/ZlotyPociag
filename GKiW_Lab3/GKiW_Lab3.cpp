@@ -153,21 +153,30 @@ void OnTimer(int id) {
 
 	if (CurrentState == play) {
 		//Ruch kamery
-		horizontalAngle += 0.15f * float(glutGet(GLUT_WINDOW_WIDTH) / 2 - mouseX);
-		verticalAngle += 0.15f  * float(glutGet(GLUT_WINDOW_HEIGHT) / 2 - mouseY);
+		float dx = 0.008f * float(glutGet(GLUT_WINDOW_WIDTH) / 2 - mouseX);
+		float dy = 0.008f  * float(glutGet(GLUT_WINDOW_HEIGHT) / 2 - mouseY);
+		if (dx != 0 || dy != 0) {
+			game->player.velRX += dx;
+			game->player.velRY += dy;
+		}
+		horizontalAngle += game->player.velRX;
+		verticalAngle += game->player.velRY;
+		game->player.velRX *= 0.9;
+		game->player.velRY *= 0.9;
+
 		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 
 		if (keystate['w']) {
-			verticalAngle += 0.5;
+			game->player.velRY += 0.07;
 		}
 		if (keystate['s']) {
-			verticalAngle -= 0.5;
+			game->player.velRY -= 0.07;
 		}
 		if (keystate['a']) {
-			horizontalAngle += 0.5;
+			game->player.velRX += 0.07;
 		}
 		if (keystate['d']) {
-			horizontalAngle -= 0.5;
+			game->player.velRX -= 0.07;
 		}
 
 		if (verticalAngle > 90) verticalAngle = 90;
