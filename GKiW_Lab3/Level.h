@@ -24,8 +24,8 @@ private:
 	//int maxPoints[5] = { 1,2,3,4,5 };
 	int trainPoints[5] = { 12, 16, 20, 22, 10000 };
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };
-	float startPosX[5] = { -2, 2, 3, 5, 4 };
-	float startPosZ[5] = { 7, 3, 5, 4, 2 };
+	float startPosX[5] = { -2, 2, 3, 0, 2 };
+	float startPosZ[5] = { 7, 10, 12, 14, 16 };
 	float tSpeed[5] = { 0.4f, 0.6f, 0.8f, 1.0f, 1.5f };
 	float startTime;
 };

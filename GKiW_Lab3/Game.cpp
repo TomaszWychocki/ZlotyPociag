@@ -89,6 +89,7 @@ void Game::showScene() {
 	}
 
 	if (train->bulletReady) {
+		PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
 		bullets.push_back(new Bullet(train->startPos.x, train->startPos.y, train->startPos.z,
 			train->shootDir.x, train->shootDir.y, train->shootDir.z, 7.0f, 999.0f, 0.0f));
 		train->bulletReady = false;

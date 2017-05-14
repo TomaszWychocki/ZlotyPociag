@@ -50,7 +50,7 @@ void Train::Render() {
 	else
 		timer += speed;
 	posX = (timer / 10);
-	std::cout << timer << std::endl;
+	//std::cout << timer << std::endl;
 
 	glTranslatef(posX, posY, 0.0f);
 	if (isBoss) {
