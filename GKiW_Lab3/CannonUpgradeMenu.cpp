@@ -3,7 +3,6 @@
 #include "CannonUpgradeMenu.h"
 #include "FunctionsPack.h"
 #include <string.h>
-#include <mmsystem.h>
 
 CannonUpgradeMenu::CannonUpgradeMenu(Game *g) {
 	this->gam = g;
@@ -33,13 +32,14 @@ CannonUpgradeMenu::CannonUpgradeMenu(Game *g) {
 	polygons[4].ymin = 596;
 	polygons[4].ymax = 660;
 
-	PlaySound("main.wav", NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+	se = createIrrKlangDevice();
+	se->play2D("sounds/main.wav", true);
 	glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
 }
 
 
 CannonUpgradeMenu::~CannonUpgradeMenu() {
-	PlaySound(NULL, 0, 0);
+	se->drop();
 }
 
 void CannonUpgradeMenu::show() {

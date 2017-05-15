@@ -6,9 +6,9 @@
 #include "GKiW_Lab3.h"
 #include <string>
 #include <iostream>
-#include <mmsystem.h>
 #include "FunctionsPack.h"
 #include <time.h>
+#include <irrKlang.h>
 
 int w = 1366;
 int h = 768;
@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
 	glutTimerFunc(17, OnTimer, 0);
 
 	glutFullScreen();
+	se = createIrrKlangDevice();
 	m_menu = new MainMenu();
 	//game = new Game();
 
@@ -94,9 +95,8 @@ void onMouseButton(int button, int state, int x, int y) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 			switch(m_menu->checkItems(x, y)) {
 			case 0:
-				game = new Game();
-				CurrentState = play;
-				glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+				CurrentState = loading;
+				glutSetCursor(GLUT_CURSOR_NONE);
 				horizontalAngle = 160.0f;
 				verticalAngle = 0;
 				delete m_menu;
@@ -127,7 +127,7 @@ void onMouseButton(int button, int state, int x, int y) {
 	else if (CurrentState == play) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 			if (true) { //game->cannon->reloading == 0
-				PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
+				se->play2D("sounds/cannon.wav");
 				game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
 													game->player.pos.y + game->player.dir.y * 1.2f,
@@ -189,10 +189,10 @@ void OnTimer(int id) {
 		game->player.dir.y = sin(verticalAngle*3.14 / 180);
 		game->player.dir.z = cos(verticalAngle*3.14 / 180) * cos(horizontalAngle*3.14 / 180);
 
-		//std::cout << horizontalAngle << " " << verticalAngle << std::endl;
+		std::cout << horizontalAngle << " " << verticalAngle << std::endl;
 
 		if (game->cannon->reloading == 0 && keystate[' ']) {
-			PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
+			se->play2D("sounds/cannon.wav");
 			game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
 			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
 				game->player.pos.y + game->player.dir.y * 1.2,
@@ -268,6 +268,17 @@ void OnTimer(int id) {
 				CurrentState = cannonUpgrade;
 			}
 		}
+	}
+	else if (CurrentState == loading) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity();
+		printText(20, 380, 10, "Wczytywanie...", 1, 1, 1);
+		glutSwapBuffers();
+		glFlush();
+		glutPostRedisplay();
+		game = new Game();
+		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
+		CurrentState = play;
 	}
 	else if (CurrentState == cannonUpgrade) {
 		cannonMenu->show();

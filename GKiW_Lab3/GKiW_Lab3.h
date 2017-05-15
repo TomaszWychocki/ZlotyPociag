@@ -11,7 +11,7 @@ void onMouseButton(int, int, int, int);
 void OnTimer(int);
 
 enum state {
-	postLevel, play, menu, highscore, cannonUpgrade
+	postLevel, play, menu, highscore, cannonUpgrade, loading
 };
 
 struct vec3 {
@@ -30,3 +30,4 @@ float rot = 0;
 int mouseX = 0, mouseY = 0;
 float horizontalAngle = 0.0f;
 float verticalAngle = 0.0f;
+ISoundEngine* se;

@@ -1,4 +1,7 @@
 #pragma once
+#include <irrKlang.h>
+using namespace irrklang;
+
 class MainMenu
 {
 public:
@@ -19,5 +22,6 @@ private:
 	GLuint BackgroundTexture;
 	GLuint TitleTexture;
 	GLuint MenuItemsTexture;
+	ISoundEngine* se;
 };
 

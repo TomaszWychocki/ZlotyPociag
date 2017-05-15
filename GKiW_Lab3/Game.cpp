@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "Game.h"
 #include <iostream>
-#include <mmsystem.h>
 
 Game::Game() {
 	points = 0;
-	cash = 200;
+	cash = 0;
+	se = irrklang::createIrrKlangDevice();
 	this->terrain = new Model("terrain.3ds");
 	train = new Train(0, false);
 	this->cannon = new Cannon();
@@ -63,13 +63,13 @@ void Game::showScene() {
 	for (size_t i = 0; i < bullets.size(); i++) {
 		if (bullets[i]->state.pos.y < 0.1f) {
 			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
+			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 		}
 		else if (bullets[i]->state.pos.z <= 0 && bullets[i]->state.angle < 900.0f) { //SYMULOWANA KOLIZJA (POPRWAWIC)
 			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
+			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 			train->HP -= ((cannon->ballPower * 3.3f) + rand()%20);
@@ -78,7 +78,7 @@ void Game::showScene() {
 		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
 			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.5f) {
 			//particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			PlaySound("explosion.wav", NULL, SND_ASYNC | SND_FILENAME);
+			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 			minusHP();
@@ -89,7 +89,7 @@ void Game::showScene() {
 	}
 
 	if (train->bulletReady) {
-		PlaySound("cannon.wav", NULL, SND_ASYNC | SND_FILENAME);
+		se->play2D("sounds/cannon.wav");
 		bullets.push_back(new Bullet(train->startPos.x, train->startPos.y, train->startPos.z,
 			train->shootDir.x, train->shootDir.y, train->shootDir.z, 7.0f, 999.0f, 0.0f));
 		train->bulletReady = false;
@@ -208,14 +208,18 @@ void Game::cannnonUpgradeClicked(int opt) {
 }
 
 bool Game::checkTime(){
-	if (currentLevel == 5 && level->curentPoints > 0)
+	if (currentLevel == 5 && level->curentPoints > 0) {
+		se->stopAllSounds();
 		return true;
+	}
 
 	if (currentLevel == 5)
 		return false;
 
-	if (level->getRemainingTime() < 0)
+	if (level->getRemainingTime() < 0) {
+		se->stopAllSounds();
 		return true;
+	}
 	else
 		return false;
 }
@@ -271,6 +275,7 @@ void Game::loadLevel(int l) {
 
 	this->timer = 0;
 	cannon->reloading = 0;
+	se->play2D("sounds/gameMusic.wav", true);
 }
 
 void Game::cleanMem(){

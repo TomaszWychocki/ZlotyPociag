@@ -7,6 +7,7 @@ Train::Train(float s, bool isBoss) {
 	this->speed = s;
 	this->isBoss = isBoss;
 	isDead = false;
+	se = irrklang::createIrrKlangDevice();
 	LoadModels();
 	setRandomTrain();
 }
@@ -26,6 +27,7 @@ void Train::LoadModels() {
 
 void Train::Render() {
 	if (HP <= 0 && !isDead) {
+		se->play2D("sounds/locomotive.wav");
 		number = currentTrain;
 		isDead = true;
 	}

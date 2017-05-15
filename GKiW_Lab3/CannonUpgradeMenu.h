@@ -1,3 +1,7 @@
+#pragma once
+#include <irrKlang.h>
+using namespace irrklang;
+
 class CannonUpgradeMenu
 {
 public:
@@ -19,5 +23,6 @@ private:
 	GLuint BackgroundTexture;
 	GLuint TitleTexture;
 	GLuint MenuItemsTexture;
+	ISoundEngine* se;
 };
 

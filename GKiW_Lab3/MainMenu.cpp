@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MainMenu.h"
 #include "FunctionsPack.h"
-#include <mmsystem.h>
 
 MainMenu::MainMenu() {
 	polygons[0].xmin = 410;
@@ -34,7 +33,8 @@ MainMenu::MainMenu() {
 	polygons[2].y1 = -1.25;
 	polygons[2].y2 = -0.5;
 
-	PlaySound("main.wav", NULL, SND_ASYNC | SND_FILENAME | SND_LOOP);
+	se = createIrrKlangDevice();
+	se->play2D("sounds/main.wav", true);
 
 	//BackgroundTexture = loadTexture();
 	//TitleTexture = loadImage("Menu/MenuTitleFruit.png");
@@ -43,7 +43,7 @@ MainMenu::MainMenu() {
 
 
 MainMenu::~MainMenu(){
-	PlaySound(NULL, 0, 0);
+	se->drop();
 }
 
 void MainMenu::show() {

@@ -6,6 +6,7 @@
 #include "FunctionsPack.h"
 #include "Train.h"
 #include "Model.h"
+#include <irrKlang.h>
 
 class Game
 {
@@ -50,5 +51,6 @@ private:
 	int timer;
 	Model *terrain;
 	Train *train;
+	irrklang::ISoundEngine* se;
 };
 

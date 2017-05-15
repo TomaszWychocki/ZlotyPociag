@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include <irrKlang.h>
 
 class Train
 {
@@ -26,6 +27,7 @@ public:
 private:
 	Model *trains[4]; //Normal, blue, green, gold
 	Model *trainCannon;
+	irrklang::ISoundEngine* se;
 	void setRandomTrain();
 	int currentTrain = 0;
 	float timer;
