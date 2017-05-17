@@ -11,7 +11,7 @@ void onMouseButton(int, int, int, int);
 void OnTimer(int);
 
 enum state {
-	postLevel, play, menu, highscore, cannonUpgrade, loading
+	postLevel, play, menu, highscore, cannonUpgrade, loading, highscores
 };
 
 struct vec3 {
@@ -22,6 +22,7 @@ state CurrentState = menu;
 MainMenu* m_menu;
 CannonUpgradeMenu* cannonMenu;
 Game* game;
+HighScores* hs;
 double Tm = 0.0;
 int wait = 0;
 int wait2 = 0;

@@ -91,6 +91,7 @@
     <ClInclude Include="FunctionsPack.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GKiW_Lab3.h" />
+    <ClInclude Include="HighScores.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Model.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="FunctionsPack.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GKiW_Lab3.cpp" />
+    <ClCompile Include="HighScores.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Model.cpp" />

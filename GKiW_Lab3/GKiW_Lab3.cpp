@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "HighScores.h"
 #include "Game.h"
 #include "MainMenu.h"
 #include "Bullet.h"
@@ -36,8 +37,9 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	glutFullScreen();
+	//glutFullScreen();
 	se = createIrrKlangDevice();
+	hs = new HighScores();
 	m_menu = new MainMenu();
 	//game = new Game();
 
@@ -102,6 +104,7 @@ void onMouseButton(int button, int state, int x, int y) {
 				delete m_menu;
 				break;
 			case 1:
+				CurrentState = highscore;
 				break;
 			case 2:
 				glutLeaveMainLoop();
@@ -109,6 +112,11 @@ void onMouseButton(int button, int state, int x, int y) {
 			}
 		}
 	}
+	else if (CurrentState == highscore) {
+		if (hs->checkItems(x, y) == 1)
+			CurrentState = menu;
+	}
+
 	if (CurrentState == cannonUpgrade) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 			int o = cannonMenu->checkItems(x, y);
@@ -221,6 +229,9 @@ void OnTimer(int id) {
 	if (CurrentState == menu) {
 		m_menu->show();
 	}
+	else if (CurrentState == highscore) {
+		hs->Render();
+	}
 	else if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
@@ -251,8 +262,10 @@ void OnTimer(int id) {
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (game->currentLevel > 5)
+		if (game->currentLevel > 5) {
 			printText(20, 380, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
+			hs->saveScore(game->points);
+		}
 		else if (game->level->curentPoints >= game->level->requiredPoints)
 			printText(20, 380, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
 		else if (game->hp <= 0)

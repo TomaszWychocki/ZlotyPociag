@@ -37,7 +37,7 @@ public:
 	Level *level;
 	Cannon *cannon;
 	std::string message = "";
-	int currentLevel = 1;
+	int currentLevel = 5;
 	int points;
 	int cash;
 	int hp = 100;
