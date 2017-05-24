@@ -11,8 +11,10 @@
 #include <time.h>
 #include <irrKlang.h>
 
-int w = 1366;
-int h = 768;
+//int w = 1366;
+//int h = 768;
+int w = 1920;
+int h = 1080;
 
 int main(int argc, char* argv[])
 {
