@@ -145,7 +145,7 @@ void Game::showScene() {
 
 	if (this->cannon->reloading > 0) {
 		if(timer++ % 30 < 15)
-			printText(500, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
+			printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
 	}
 	else
 		timer = 0;

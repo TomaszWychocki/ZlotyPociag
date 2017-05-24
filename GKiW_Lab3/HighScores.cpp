@@ -3,6 +3,13 @@
 
 HighScores::HighScores(){
 	getHighScores();
+
+	ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);
+	back = ilutGLLoadImage("images/wstecz.jpg");
+	bg = ilutGLLoadImage("images/menu_2.jpg");
 }
 
 
@@ -58,20 +65,30 @@ void HighScores::Render(){
 	glPushMatrix();
 	glLoadIdentity();
 
-	glBegin(GL_LINE_LOOP);
-		glVertex2f(35, 596);
-		glVertex2f(35, 660);
-		glVertex2f(293, 660);
-		glVertex2f(293, 596);
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, bg);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);   glVertex2f(0, height);
+		glTexCoord2f(0.0f, 1.0f);   glVertex2f(0, 0);
+		glTexCoord2f(1.0f, 1.0f);   glVertex2f(width, 0);
+		glTexCoord2f(1.0f, 0.0f);   glVertex2f(width, height);
 	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, back);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f); glVertex2f(35, height - 35);
+		glTexCoord2f(0.0f, 1.0f); glVertex2f(35, height - (35 + 64));
+		glTexCoord2f(1.0f, 1.0f); glVertex2f(293, height - (35 + 64));
+		glTexCoord2f(1.0f, 0.0f); glVertex2f(293, height - 35);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
-
-	printText(115, 635, 6, "Wstecz", 1, 1, 0);
 
 	for (size_t i = 0; i < sc.size(); i++) {
 		printText(200, (i*35) + 50, 3, "[GRACZ " + std::to_string(sc[i].first) + "] PUNKTY: " + std::to_string(sc[i].second), 1, 1, 0);
@@ -90,7 +107,7 @@ int HighScores::getNumber() {
 }
 
 int HighScores::checkItems(int x, int y) {
-	if ((y >= 596) && (y<=660) && (x >= 35) && (x <= 293)) 
+	if ((y >= glutGet(GLUT_WINDOW_HEIGHT) - (35 + 64)) && (y<= glutGet(GLUT_WINDOW_HEIGHT) - 35) && (x >= 35) && (x <= 293))
 		return 1;
 	else
 		return -1;

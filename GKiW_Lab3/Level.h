@@ -18,7 +18,7 @@ public:
 	int getRemainingTime();
 
 private:
-	int maxTimes[5] = { 60,50,40,40,100 };
+	int maxTimes[5] = { 3,50,40,40,100 }; // 60
 	int maxPoints[5] = { 100,150,180,220,9999 };
 	//int maxTimes[5] = { 30,25,20,20,50 };
 	//int maxPoints[5] = { 1,2,3,4,5 };

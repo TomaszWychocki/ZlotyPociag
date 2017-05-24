@@ -1,5 +1,8 @@
 #pragma once
 #include <irrKlang.h>
+#include <IL/il.h> 
+#include <IL/ilu.h> 
+#include <IL/ilut.h>
 using namespace irrklang;
 
 class CannonUpgradeMenu
@@ -21,8 +24,11 @@ private:
 
 	long selectedMenu = -1;
 	GLuint BackgroundTexture;
-	GLuint TitleTexture;
-	GLuint MenuItemsTexture;
+	GLuint exitItem;
+	GLuint playItem;
+	GLuint arrow;
 	ISoundEngine* se;
+	int height;
+	int width;
 };
 

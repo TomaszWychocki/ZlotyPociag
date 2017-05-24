@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	//glutFullScreen();
+	glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
@@ -265,15 +265,15 @@ void OnTimer(int id) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if (game->currentLevel > 5) {
-			printText(20, 380, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
 			hs->saveScore(game->points);
 		}
 		else if (game->level->curentPoints >= game->level->requiredPoints)
-			printText(20, 380, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
 		else if (game->hp <= 0)
-			printText(20, 380, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
 		else
-			printText(80, 380, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
+			printText(80, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 
 		if (wait == 0) {
 			if (game->currentLevel > 5 || game->hp <= 0)
@@ -287,7 +287,7 @@ void OnTimer(int id) {
 	else if (CurrentState == loading) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
-		printText(20, 380, 10, "Wczytywanie...", 1, 1, 1);
+		printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wczytywanie...", 1, 1, 1);
 		glutSwapBuffers();
 		glFlush();
 		glutPostRedisplay();

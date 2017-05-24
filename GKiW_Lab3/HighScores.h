@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 #include "FunctionsPack.h"
+#include <IL/il.h> 
+#include <IL/ilu.h> 
+#include <IL/ilut.h>
 
 using namespace std;
 
@@ -21,5 +24,7 @@ private:
 	int getNumber();
 	vector<pair<int, int>> sc;
 	bool saved = false;
+	GLuint back;
+	GLuint bg;
 };
 
