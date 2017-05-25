@@ -34,7 +34,6 @@ void Game::showScene() {
 	float l0_dif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	float l0_spe[] = { 0.5f, 0.5f, 0.5f, 0.2f };
 	float l0_pos[] = { 0.0f, 30.0f, 0.0f, 1.0f };
-	float lightDir[3] = { this->player.dir.x, this->player.dir.y, this->player.dir.z };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_amb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_dif);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, l0_spe);
@@ -256,7 +255,7 @@ void Game::loadLevel(int l) {
 		train->isBoss = false;
 
 	train->speed = level->trainSpeed;
-	train->setDefault();
+	train->setDefault(200 * currentLevel / 5);
 
 	this->player.pos.x = level->sX;
 	this->player.pos.y = 0.3f;
@@ -272,6 +271,14 @@ void Game::loadLevel(int l) {
 
 	this->player.velRX = 0;
 	this->player.velRY = 0;
+
+	//Mgla
+	GLfloat density = 0.015 * currentLevel;
+	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogf(GL_FOG_DENSITY, density);
+	glEnable(GL_FOG);
 
 	this->timer = 0;
 	cannon->reloading = 0;

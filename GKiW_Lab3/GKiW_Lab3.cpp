@@ -237,6 +237,7 @@ void OnTimer(int id) {
 	else if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
+			glDisable(GL_FOG);
 			glDisable(GL_TEXTURE_2D);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			game->cleanMem();
@@ -252,6 +253,7 @@ void OnTimer(int id) {
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			wait = 200;
 			CurrentState = postLevel;
+			glDisable(GL_FOG);
 			game->cleanMem();
 		}
 		else

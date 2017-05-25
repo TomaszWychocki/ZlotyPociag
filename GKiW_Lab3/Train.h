@@ -13,7 +13,7 @@ public:
 	~Train();
 	void LoadModels();
 	void Render();
-	void setDefault();
+	void setDefault(int);
 	float HP;
 	float speed;
 	bool isBoss;
@@ -35,5 +35,6 @@ private:
 	float posY;
 	bool dir = false;
 	bool isDead;
+	int HPdelta = 0;
 };
 

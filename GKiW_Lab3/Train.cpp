@@ -96,9 +96,10 @@ void Train::Render() {
 	trains[currentTrain]->Render();
 }
 
-void Train::setDefault() {
+void Train::setDefault(int hpd) {
 	dir = false;
 	isDead = false;
+	HPdelta = hpd;
 	if (isBoss) HP = 1000;	
 	setRandomTrain();
 }
@@ -117,7 +118,9 @@ void Train::setRandomTrain() {
 	posX = 0;
 	posY = -0.43f;
 	dir = !dir;
-	if (!isBoss) HP = 100;
+	if (!isBoss) {
+		HP = HPdelta + (rand() % 51);
+	}
 	isDead = false;
 	bulletReady = false;
 
