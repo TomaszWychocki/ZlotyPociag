@@ -14,6 +14,7 @@ public:
 	void LoadModels();
 	void Render();
 	void setDefault(int);
+	void showTrainByNumber(int);
 	float HP;
 	float speed;
 	bool isBoss;

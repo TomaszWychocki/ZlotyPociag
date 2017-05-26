@@ -10,6 +10,7 @@ Game::Game() {
 	train = new Train(0, false);
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
+	this->tutorial = new Tutorial(train);
 }
 
 
@@ -22,26 +23,21 @@ void Game::showScene() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+#pragma region Scena
+
+	if (currentLevel == 0) {
+		tutorial->Render();
+		glPushMatrix();
+			terrain->Render();
+		glPopMatrix();
+		return;
+	}
+
 	gluLookAt(
 		this->player.pos.x, this->player.pos.y, this->player.pos.z,
 		this->player.pos.x + this->player.dir.x, this->player.pos.y + this->player.dir.y, this->player.pos.z + this->player.dir.z,
 		0.0f, 1.0f, 0.0f
 	);
-
-#pragma region Swiatlo_0
-
-	float l0_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	float l0_dif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	float l0_spe[] = { 0.5f, 0.5f, 0.5f, 0.2f };
-	float l0_pos[] = { 0.0f, 30.0f, 0.0f, 1.0f };
-	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_amb);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_dif);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, l0_spe);
-	glLightfv(GL_LIGHT0, GL_POSITION, l0_pos);
-
-#pragma endregion
-
-#pragma region Scena
 
 	glPushMatrix();
 		terrain->Render();
@@ -207,15 +203,24 @@ void Game::cannnonUpgradeClicked(int opt) {
 }
 
 bool Game::checkTime(){
-	if (currentLevel == 5 && level->curentPoints > 0) {
-		se->stopAllSounds();
-		return true;
+	if (currentLevel > 0) {
+		if (currentLevel == 5 && level->curentPoints > 0) {
+			se->stopAllSounds();
+			return true;
+		}
+
+		if (currentLevel == 5)
+			return false;
+
+		if (level->getRemainingTime() < 0) {
+			se->stopAllSounds();
+			return true;
+		}
+		else
+			return false;
 	}
-
-	if (currentLevel == 5)
-		return false;
-
-	if (level->getRemainingTime() < 0) {
+	else if (tutorial->end == true) {
+		delete tutorial;
 		se->stopAllSounds();
 		return true;
 	}
@@ -248,18 +253,33 @@ void Game::loadLevel(int l) {
 	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 3.0f);
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
 
-	this->level = new Level(l);
-	if (l == 5)
-		train->isBoss = true;
-	else
-		train->isBoss = false;
+#pragma region Swiatlo_ogolne
 
-	train->speed = level->trainSpeed;
-	train->setDefault(200 * currentLevel / 5);
+	float l0_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	float l0_dif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	float l0_spe[] = { 0.5f, 0.5f, 0.5f, 0.2f };
+	float l0_pos[] = { 0.0f, 30.0f, 0.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_amb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, l0_dif);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, l0_spe);
+	glLightfv(GL_LIGHT0, GL_POSITION, l0_pos);
 
-	this->player.pos.x = level->sX;
-	this->player.pos.y = 0.3f;
-	this->player.pos.z = level->sZ;
+#pragma endregion
+
+	if (l > 0) {
+		this->level = new Level(l);
+		if (l == 5)
+			train->isBoss = true;
+		else
+			train->isBoss = false;
+
+		train->speed = level->trainSpeed;
+		train->setDefault(200 * currentLevel / 5);
+
+		this->player.pos.x = level->sX;
+		this->player.pos.y = 0.3f;
+		this->player.pos.z = level->sZ;
+	}
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
 
@@ -273,7 +293,7 @@ void Game::loadLevel(int l) {
 	this->player.velRY = 0;
 
 	//Mgla
-	GLfloat density = 0.015 * currentLevel;
+	GLfloat density = 0.015 * l;
 	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, fogColor);

@@ -7,6 +7,7 @@
 #include "Train.h"
 #include "Model.h"
 #include <irrKlang.h>
+#include "Tutorial.h"
 
 class Game
 {
@@ -37,7 +38,7 @@ public:
 	Level *level;
 	Cannon *cannon;
 	std::string message = "";
-	int currentLevel = 4;
+	int currentLevel = 0;
 	int points;
 	int cash;
 	int hp = 100;
@@ -52,5 +53,6 @@ private:
 	Model *terrain;
 	Train *train;
 	irrklang::ISoundEngine* se;
+	Tutorial *tutorial;
 };
 

@@ -134,7 +134,7 @@ void onMouseButton(int button, int state, int x, int y) {
 			}
 		}
 	}
-	else if (CurrentState == play) {
+	else if (CurrentState == play && game->currentLevel > 0) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 			if (true) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
@@ -161,7 +161,7 @@ void OnTimer(int id) {
 
 	Tm = glutGet(GLUT_ELAPSED_TIME); // Ile milisekund uplynelo od momentu uruchomienia programu?
 
-	if (CurrentState == play) {
+	if (CurrentState == play && game->currentLevel > 0) {
 		//Ruch kamery
 		float dx = 0.008f * float(glutGet(GLUT_WINDOW_WIDTH) / 2 - mouseX);
 		float dy = 0.008f  * float(glutGet(GLUT_WINDOW_HEIGHT) / 2 - mouseY);
@@ -241,12 +241,15 @@ void OnTimer(int id) {
 			glDisable(GL_TEXTURE_2D);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			game->cleanMem();
-			game->cash += game->level->curentCash;
-			game->cash += (int)(game->level->curentPoints * 0.6);
-			if (game->level->curentPoints >= game->level->requiredPoints) {
-				game->points += game->level->curentPoints;
-				game->currentLevel++;
+			if (game->currentLevel > 0) {
+				game->cash += game->level->curentCash;
+				game->cash += (int)(game->level->curentPoints * 0.6);
+				if (game->level->curentPoints >= game->level->requiredPoints) {
+					game->points += game->level->curentPoints;
+					game->currentLevel++;
+				}
 			}
+
 			wait = 200;
 		}
 		else if (game->hp <= 0) {
@@ -266,7 +269,10 @@ void OnTimer(int id) {
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (game->currentLevel > 5) {
+		if (game->currentLevel == 0) {
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Poziom 1", 1, 1, 1);
+		}
+		else if (game->currentLevel > 5) {
 			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
 			hs->saveScore(game->points);
 		}
@@ -278,7 +284,12 @@ void OnTimer(int id) {
 			printText(80, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 
 		if (wait == 0) {
-			if (game->currentLevel > 5 || game->hp <= 0)
+			if (game->currentLevel == 0) {
+				game->currentLevel = 1;
+				game->loadLevel(game->currentLevel);
+				CurrentState = play;
+			}
+			else if (game->currentLevel > 5 || game->hp <= 0)
 				glutLeaveMainLoop();
 			else {
 				cannonMenu = new CannonUpgradeMenu(game);

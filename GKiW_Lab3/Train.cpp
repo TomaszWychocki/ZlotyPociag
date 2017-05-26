@@ -104,6 +104,19 @@ void Train::setDefault(int hpd) {
 	setRandomTrain();
 }
 
+void Train::showTrainByNumber(int n) {
+	glPushMatrix();
+		glTranslatef(-3.0f, -0.43f, 0.0f);
+		if (n == 3) {
+			glPushMatrix();
+				glTranslatef(3.23f, 1.1f, 0.0f);
+				trainCannon->Render();
+			glPopMatrix();
+		}
+		trains[n]->Render();
+	glPopMatrix();
+}
+
 void Train::setRandomTrain() {
 	int r = rand() % 20;
 	if (r <= 15)
