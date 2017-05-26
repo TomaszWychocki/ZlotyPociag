@@ -13,11 +13,21 @@
 
 //int w = 1366;
 //int h = 768;
-int w = 1920;
-int h = 1080;
+int w = 0;
+int h = 0;
+
+void GetRes(int &hor, int& vert) {
+	RECT desktop;
+	const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktop);
+	hor = desktop.right;
+	vert = desktop.bottom;
+}
 
 int main(int argc, char* argv[])
 {
+	GetRes(w, h);
+
 	glutInit(&argc, argv);
 
 	srand(time(NULL) ^ clock());
