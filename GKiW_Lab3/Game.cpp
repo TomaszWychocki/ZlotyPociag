@@ -11,7 +11,7 @@ Game::Game() {
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 	this->tutorial = new Tutorial(train);
-	//this->skybox = new Skybox(60.0f);
+	this->skybox = new Skybox(60.0f);
 }
 
 
@@ -31,7 +31,7 @@ void Game::showScene() {
 		glPushMatrix();
 			terrain->Render();
 		glPopMatrix();
-		//skybox->Render();
+		skybox->Render();
 		return;
 	}
 
@@ -45,7 +45,7 @@ void Game::showScene() {
 		terrain->Render();
 	glPopMatrix();
 
-	//skybox->Render();
+	skybox->Render();
 
 	glPushMatrix();
 		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
@@ -302,7 +302,7 @@ void Game::loadLevel(int l) {
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, fogColor);
 	glFogf(GL_FOG_DENSITY, density);
-	glEnable(GL_FOG);
+	//glEnable(GL_FOG);
 
 	this->timer = 0;
 	cannon->reloading = 0;
