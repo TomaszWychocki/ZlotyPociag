@@ -37,6 +37,7 @@ public:
 	bool lightEnabled = true;
 	Level *level;
 	Cannon *cannon;
+	Tutorial *tutorial;
 	std::string message = "";
 	int currentLevel = 0;
 	int points;
@@ -53,6 +54,5 @@ private:
 	Model *terrain;
 	Train *train;
 	irrklang::ISoundEngine* se;
-	Tutorial *tutorial;
 };
 

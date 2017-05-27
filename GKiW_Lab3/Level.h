@@ -18,9 +18,9 @@ public:
 	int getRemainingTime();
 
 private:
-	int maxTimes[5] = { 3,50,40,40,100 }; // 60
+	//int maxTimes[5] = { 60,50,40,40,100 };
 	int maxPoints[5] = { 100,150,180,220,9999 };
-	//int maxTimes[5] = { 30,25,20,20,50 };
+	int maxTimes[5] = { 30,25,20,20,50 };
 	//int maxPoints[5] = { 1,2,3,4,5 };
 	int trainPoints[5] = { 12, 16, 20, 22, 10000 };
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };

@@ -12,7 +12,7 @@ Bullet::Bullet(float Sx, float Sy, float Sz, float Dx, float Dy, float Dz, float
 	startPosition.x = Sx;
 	startPosition.y = Sy;
 	startPosition.z = Sz;
-	state.speed = speed / 12.0f;
+	state.speed = speed;
 
 	if (angle < 900.0f) {
 		state.angle = 25.0f * (angle / 90);
@@ -46,23 +46,24 @@ void Bullet::show(){
 
 void Bullet::move(){
 	if (state.angle < 900.0f) {
-		state.pos.x += (state.dir.x * state.speed + (state.wind * t)) * 0.7;
-		state.pos.y = getYParameter(); // *0.7
-		state.pos.z += state.dir.z * state.speed * 0.7;
+		state.pos.x += (state.dir.x * (state.speed / 12) + (state.wind * t)) * 0.7;
+		state.pos.y = getYParameter();
+		state.pos.z += state.dir.z * (state.speed / 12) * 0.7;
 	}
 	else {
-		state.pos.x += state.dir.x * state.speed;
-		state.pos.y += state.dir.y * state.speed;
-		state.pos.z += state.dir.z * state.speed;
+		state.pos.x += state.dir.x * 0.58f;
+		state.pos.y += state.dir.y * 0.58f;
+		state.pos.z += state.dir.z * 0.58f;
 	}
 
 
-	t += 1;
+	t = t + 0.3f + (0.06f * state.speed);
+	//t += 1;
 	if (t > 5)
 		glDisable(GL_LIGHT1);
 	//std::cout << state.pos.x << " " << state.pos.y << " " << state.pos.z << " " << std::endl;
 }
 
 float Bullet::getYParameter() {
-	return ((tan(state.angle)*t) - ((9.8*pow(t, 2)) / (2 * pow(state.speed*80, 2)*pow(cos(state.angle),2)))) + startPosition.y + state.dir.y;
+	return ((tan(state.angle)*t) - ((9.8*pow(t, 2)) / (2 * pow(0.58f * 80, 2)*pow(cos(state.angle), 2)))) + startPosition.y;
 }

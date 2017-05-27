@@ -148,17 +148,22 @@ void onMouseButton(int button, int state, int x, int y) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 			if (true) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
-				game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
+				game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
 													game->player.pos.y + game->player.dir.y * 1.2f,
 													game->player.pos.z + game->player.dir.z * 1.2f,
 													game->player.dir.x, 
 													game->player.dir.y, 
 													game->player.dir.z, 
-													game->cannon->ballSpeed, 
+													game->cannon->ballSpeed + game->cannon->ballSpeedLevel, 
 													verticalAngle, 
 													game->level->wind));
 			}
+		}
+	}
+	else if (CurrentState == play && game->currentLevel == 0) {
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+			game->tutorial->end = true;
 		}
 	}
 }
@@ -213,14 +218,14 @@ void OnTimer(int id) {
 
 		if (game->cannon->reloading == 0 && keystate[' ']) {
 			se->play2D("sounds/cannon.wav");
-			game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
+			game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
 			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
 				game->player.pos.y + game->player.dir.y * 1.2,
 				game->player.pos.z + game->player.dir.z * 1.2,
 				game->player.dir.x,
 				game->player.dir.y,
 				game->player.dir.z,
-				game->cannon->ballSpeed,
+				game->cannon->ballSpeed + game->cannon->ballSpeedLevel,
 				verticalAngle,
 				game->level->wind));
 		}

@@ -67,7 +67,7 @@ void Game::showScene() {
 			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
-			train->HP -= ((cannon->ballPower * 3.3f) + rand()%20);
+			train->HP -= ((cannon->ballPower * cannon->ballPowerLevel * 1.5f) + rand()%20);
 			if (train->HP < 0) train->HP = 0;
 		}
 		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
