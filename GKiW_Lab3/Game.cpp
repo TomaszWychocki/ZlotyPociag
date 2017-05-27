@@ -11,6 +11,7 @@ Game::Game() {
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 	this->tutorial = new Tutorial(train);
+	//this->skybox = new Skybox(60.0f);
 }
 
 
@@ -30,6 +31,7 @@ void Game::showScene() {
 		glPushMatrix();
 			terrain->Render();
 		glPopMatrix();
+		//skybox->Render();
 		return;
 	}
 
@@ -42,6 +44,8 @@ void Game::showScene() {
 	glPushMatrix();
 		terrain->Render();
 	glPopMatrix();
+
+	//skybox->Render();
 
 	glPushMatrix();
 		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
@@ -234,7 +238,7 @@ void Game::loadLevel(int l) {
 	glutSetCursor(GLUT_CURSOR_NONE);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), .01f, 100.0f);
+	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), .01f, 120.0f);
 
 	// Ustawiamy komponent ambient naszej sceny - wartosc niezalezna od swiatla (warto zresetowac)
 	float gl_amb[] = { 0.01f, 0.01f, 0.01f, 1.0f };

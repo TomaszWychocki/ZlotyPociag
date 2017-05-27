@@ -17,7 +17,7 @@ Bullet::Bullet(float Sx, float Sy, float Sz, float Dx, float Dy, float Dz, float
 	if (angle < 900.0f) {
 		state.angle = 25.0f * (angle / 90);
 		state.angle *= 3.1415 / 180;
-		state.wind = wind;
+		state.wind = wind * 0.8f;
 		//std::cout << state.angle << std::endl;
 	}
 	else
