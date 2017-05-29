@@ -11,23 +11,11 @@
 #include <time.h>
 #include <irrKlang.h>
 
-//int w = 1366;
-//int h = 768;
-int w = 0;
-int h = 0;
-
-void GetRes(int &hor, int& vert) {
-	RECT desktop;
-	const HWND hDesktop = GetDesktopWindow();
-	GetWindowRect(hDesktop, &desktop);
-	hor = desktop.right;
-	vert = desktop.bottom;
-}
+int w = 1366;
+int h = 768;
 
 int main(int argc, char* argv[])
 {
-	GetRes(w, h);
-
 	glutInit(&argc, argv);
 
 	srand(time(NULL) ^ clock());
@@ -49,7 +37,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	glutFullScreen();
+	//glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
@@ -144,26 +132,21 @@ void onMouseButton(int button, int state, int x, int y) {
 			}
 		}
 	}
-	else if (CurrentState == play && game->currentLevel > 0) {
+	else if (CurrentState == play) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 			if (true) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
-				game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
+				game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
 													game->player.pos.y + game->player.dir.y * 1.2f,
 													game->player.pos.z + game->player.dir.z * 1.2f,
 													game->player.dir.x, 
 													game->player.dir.y, 
 													game->player.dir.z, 
-													game->cannon->ballSpeed + game->cannon->ballSpeedLevel, 
+													game->cannon->ballSpeed, 
 													verticalAngle, 
 													game->level->wind));
 			}
-		}
-	}
-	else if (CurrentState == play && game->currentLevel == 0) {
-		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-			game->tutorial->end = true;
 		}
 	}
 }
@@ -176,7 +159,7 @@ void OnTimer(int id) {
 
 	Tm = glutGet(GLUT_ELAPSED_TIME); // Ile milisekund uplynelo od momentu uruchomienia programu?
 
-	if (CurrentState == play && game->currentLevel > 0) {
+	if (CurrentState == play) {
 		//Ruch kamery
 		float dx = 0.008f * float(glutGet(GLUT_WINDOW_WIDTH) / 2 - mouseX);
 		float dy = 0.008f  * float(glutGet(GLUT_WINDOW_HEIGHT) / 2 - mouseY);
@@ -218,14 +201,14 @@ void OnTimer(int id) {
 
 		if (game->cannon->reloading == 0 && keystate[' ']) {
 			se->play2D("sounds/cannon.wav");
-			game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
+			game->cannon->reloading = (game->cannon->fireRate - (0.6*game->cannon->fireRateLevel)) * 20;
 			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
 				game->player.pos.y + game->player.dir.y * 1.2,
 				game->player.pos.z + game->player.dir.z * 1.2,
 				game->player.dir.x,
 				game->player.dir.y,
 				game->player.dir.z,
-				game->cannon->ballSpeed + game->cannon->ballSpeedLevel,
+				game->cannon->ballSpeed,
 				verticalAngle,
 				game->level->wind));
 		}
@@ -252,26 +235,21 @@ void OnTimer(int id) {
 	else if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
-			glDisable(GL_FOG);
 			glDisable(GL_TEXTURE_2D);
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			game->cleanMem();
-			if (game->currentLevel > 0) {
-				game->cash += game->level->curentCash;
-				game->cash += (int)(game->level->curentPoints * 0.6);
-				if (game->level->curentPoints >= game->level->requiredPoints) {
-					game->points += game->level->curentPoints;
-					game->currentLevel++;
-				}
+			game->cash += game->level->curentCash;
+			game->cash += (int)(game->level->curentPoints * 0.6);
+			if (game->level->curentPoints >= game->level->requiredPoints) {
+				game->points += game->level->curentPoints;
+				game->currentLevel++;
 			}
-
 			wait = 200;
 		}
 		else if (game->hp <= 0) {
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			wait = 200;
 			CurrentState = postLevel;
-			glDisable(GL_FOG);
 			game->cleanMem();
 		}
 		else
@@ -284,27 +262,19 @@ void OnTimer(int id) {
 		glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (game->currentLevel == 0) {
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Poziom 1", 1, 1, 1);
-		}
-		else if (game->currentLevel > 5) {
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
+		if (game->currentLevel > 5) {
+			printText(20, 380, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
 			hs->saveScore(game->points);
 		}
 		else if (game->level->curentPoints >= game->level->requiredPoints)
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
+			printText(20, 380, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
 		else if (game->hp <= 0)
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
+			printText(20, 380, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
 		else
-			printText(80, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
+			printText(80, 380, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 
 		if (wait == 0) {
-			if (game->currentLevel == 0) {
-				game->currentLevel = 1;
-				game->loadLevel(game->currentLevel);
-				CurrentState = play;
-			}
-			else if (game->currentLevel > 5 || game->hp <= 0)
+			if (game->currentLevel > 5 || game->hp <= 0)
 				glutLeaveMainLoop();
 			else {
 				cannonMenu = new CannonUpgradeMenu(game);
@@ -315,7 +285,7 @@ void OnTimer(int id) {
 	else if (CurrentState == loading) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
-		printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wczytywanie...", 1, 1, 1);
+		printText(20, 380, 10, "Wczytywanie...", 1, 1, 1);
 		glutSwapBuffers();
 		glFlush();
 		glutPostRedisplay();

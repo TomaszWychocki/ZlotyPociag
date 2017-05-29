@@ -9,7 +9,6 @@ void OnSpecialKeyUp(int, int, int);
 void OnMove(int, int);
 void onMouseButton(int, int, int, int);
 void OnTimer(int);
-void GetRes(int&, int&);
 
 enum state {
 	postLevel, play, menu, highscore, cannonUpgrade, loading, highscores

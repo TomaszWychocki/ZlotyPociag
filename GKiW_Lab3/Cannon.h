@@ -10,7 +10,7 @@ public:
 	Model *model;
 	int fireRate = 6;
 	int ballPower = 20;
-	int ballSpeed = 2;
+	int ballSpeed = 7;
 	//CannonModel
 
 	//Timer

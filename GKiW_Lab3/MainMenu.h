@@ -1,8 +1,5 @@
 #pragma once
 #include <irrKlang.h>
-#include <IL/il.h> 
-#include <IL/ilu.h> 
-#include <IL/ilut.h>
 using namespace irrklang;
 
 class MainMenu
@@ -16,17 +13,15 @@ public:
 private:
 	typedef struct polygon
 	{
+		float x1, y1, x2, y2;
 		int xmin, xmax, ymin, ymax;
 	} polygon;
 
 	polygon polygons[3];
 	long selectedMenu = -1;
 	GLuint BackgroundTexture;
-	GLuint startItem;
-	GLuint scoresItem;
-	GLuint exitItem;
+	GLuint TitleTexture;
+	GLuint MenuItemsTexture;
 	ISoundEngine* se;
-	int width;
-	int height;
 };
 

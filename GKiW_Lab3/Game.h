@@ -7,8 +7,6 @@
 #include "Train.h"
 #include "Model.h"
 #include <irrKlang.h>
-#include "Tutorial.h"
-#include "Skybox.h"
 
 class Game
 {
@@ -38,9 +36,8 @@ public:
 	bool lightEnabled = true;
 	Level *level;
 	Cannon *cannon;
-	Tutorial *tutorial;
 	std::string message = "";
-	int currentLevel = 0;
+	int currentLevel = 5;
 	int points;
 	int cash;
 	int hp = 100;
@@ -55,6 +52,5 @@ private:
 	Model *terrain;
 	Train *train;
 	irrklang::ISoundEngine* se;
-	Skybox *skybox;
 };
 

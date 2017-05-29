@@ -96,25 +96,11 @@ void Train::Render() {
 	trains[currentTrain]->Render();
 }
 
-void Train::setDefault(int hpd) {
+void Train::setDefault() {
 	dir = false;
 	isDead = false;
-	HPdelta = hpd;
 	if (isBoss) HP = 1000;	
 	setRandomTrain();
-}
-
-void Train::showTrainByNumber(int n) {
-	glPushMatrix();
-		glTranslatef(-3.0f, -0.43f, 0.0f);
-		if (n == 3) {
-			glPushMatrix();
-				glTranslatef(3.23f, 1.1f, 0.0f);
-				trainCannon->Render();
-			glPopMatrix();
-		}
-		trains[n]->Render();
-	glPopMatrix();
 }
 
 void Train::setRandomTrain() {
@@ -131,9 +117,7 @@ void Train::setRandomTrain() {
 	posX = 0;
 	posY = -0.43f;
 	dir = !dir;
-	if (!isBoss) {
-		HP = HPdelta + (rand() % 51);
-	}
+	if (!isBoss) HP = 100;
 	isDead = false;
 	bulletReady = false;
 
