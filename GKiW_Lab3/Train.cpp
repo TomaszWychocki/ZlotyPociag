@@ -25,7 +25,7 @@ void Train::LoadModels() {
 	trainCannon = new Model("Train_cannon.3ds");
 }
 
-void Train::Render() {
+void Train::Calculate() {
 	if (HP <= 0 && !isDead) {
 		se->play2D("sounds/locomotive.wav");
 		number = currentTrain;
@@ -54,21 +54,12 @@ void Train::Render() {
 	posX = (timer / 10);
 	//std::cout << timer << std::endl;
 
-	glTranslatef(posX, posY, 0.0f);
 	if (isBoss) {
-		glPushMatrix();
-			float a;
-			if (dir) {
-				glTranslatef(3.23f, 1.1f, 0.0f);
+			if (dir)
 				a = atan2f(playerPosX - (posX + 3.23f), playerPosZ);
-			}
-			else {
-				glTranslatef(-3.23f, 1.1f, 0.0f);
+			else
 				a = atan2f(playerPosX - (posX - 3.23f), playerPosZ);
-			}
 			a = a * 180 / 3.1415;
-			glRotatef(a, 0, 1, 0);
-			trainCannon->Render();
 
 			if (abs(timer - 20) <= 0.5f || abs(timer - 0) <= 0.5f) {
 				if (dir) {
@@ -89,8 +80,23 @@ void Train::Render() {
 				shootDir.z /= l;
 				bulletReady = true;
 			}
+
+	}
+}
+
+void Train::Render() {
+	glTranslatef(posX, posY, 0.0f);
+	if (isBoss) {
+		glPushMatrix();
+			if (dir)
+				glTranslatef(3.23f, 1.1f, 0.0f);
+			else
+				glTranslatef(-3.23f, 1.1f, 0.0f);
+			glRotatef(a, 0, 1, 0);
+			trainCannon->Render();
 		glPopMatrix();
 	}
+
 	if (!dir)
 		glRotatef(180.0f, 0, 1, 0);
 	trains[currentTrain]->Render();

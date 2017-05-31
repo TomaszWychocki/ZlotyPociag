@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
-	//game = new Game();
 
 	glutMainLoop();
 
@@ -243,13 +242,7 @@ void OnTimer(int id) {
 		if (wait > 0) wait--;
 	}
 
-	if (CurrentState == menu) {
-		m_menu->show();
-	}
-	else if (CurrentState == highscore) {
-		hs->Render();
-	}
-	else if (CurrentState == play) {
+	if (CurrentState == play) {
 		if (game->checkTime()) {
 			CurrentState = postLevel;
 			glDisable(GL_FOG);
@@ -275,29 +268,9 @@ void OnTimer(int id) {
 			game->cleanMem();
 		}
 		else
-			game->showScene();
+			game->calculateScene();
 	}
 	else if (CurrentState == postLevel) {
-		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_LIGHTING);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		if (game->currentLevel == 0) {
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Poziom 1", 1, 1, 1);
-		}
-		else if (game->currentLevel > 5) {
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
-			hs->saveScore(game->points);
-		}
-		else if (game->level->curentPoints >= game->level->requiredPoints)
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
-		else if (game->hp <= 0)
-			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
-		else
-			printText(80, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
-
 		if (wait == 0) {
 			if (game->currentLevel == 0) {
 				game->currentLevel = 1;
@@ -323,16 +296,65 @@ void OnTimer(int id) {
 		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 		CurrentState = play;
 	}
+}
+
+void OnRender() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	if (CurrentState == menu) {
+		m_menu->show();
+	}
+	else if (CurrentState == highscore) {
+		hs->Render();
+	}
+	else if (CurrentState == play && game->currentLevel > 0) {
+		gluLookAt(
+			game->player.pos.x, game->player.pos.y, game->player.pos.z,
+			game->player.pos.x + game->player.dir.x, game->player.pos.y + game->player.dir.y, game->player.pos.z + game->player.dir.z,
+			0.0f, 1.0f, 0.0f
+		);
+
+		game->renderTerrain();
+		game->renderSkybox();
+		game->renderCannon();
+		game->renderTrain();
+		game->renderBullets();
+		game->renderParticles();
+		game->renderHUD();
+	}
+	else if (CurrentState == play && game->currentLevel == 0) {
+		game->renderTutorial();
+		game->renderTerrain();
+		game->renderSkybox();
+	}
 	else if (CurrentState == cannonUpgrade) {
 		cannonMenu->show();
+	}
+	else if (CurrentState == postLevel) {
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_LIGHTING);
+		glMatrixMode(GL_PROJECTION);
+
+		if (game->currentLevel == 0) {
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Poziom 1", 1, 1, 1);
+		}
+		else if (game->currentLevel > 5) {
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wygrales! Twoje punkty: " + std::to_string(game->points), 1, 1, 1);
+			hs->saveScore(game->points);
+		}
+		else if (game->level->curentPoints >= game->level->requiredPoints)
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przeszedles do poziomu " + std::to_string(game->currentLevel), 1, 1, 1);
+		else if (game->hp <= 0)
+			printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Przegrales :(. Zacznij gre od nowa!", 1, 1, 1);
+		else
+			printText(80, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Nie zdobyles wymaganej liczby punktow!", 1, 1, 1);
 	}
 
 	glutSwapBuffers();
 	glFlush();
 	glutPostRedisplay();
-}
-
-void OnRender() {
 }
 
 void OnReshape(int width, int height) {

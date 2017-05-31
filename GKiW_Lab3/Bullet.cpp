@@ -32,7 +32,7 @@ Bullet::~Bullet(){
 	std::cout << "Delete" << std::endl;
 }
 
-void Bullet::show(){
+void Bullet::Render(){
 	glPushMatrix();
 		glTranslatef(state.pos.x, state.pos.y, state.pos.z);
 		if (state.angle < 900.0f)
@@ -40,8 +40,6 @@ void Bullet::show(){
 		else
 			glutSolidSphere(0.03, 30, 30);
 	glPopMatrix();
-
-	move();
 }
 
 void Bullet::move(){

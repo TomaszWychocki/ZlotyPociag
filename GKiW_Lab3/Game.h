@@ -26,12 +26,21 @@ class Game
 public:
 	Game();
 	~Game();
-	void showScene();
+	void calculateScene();
 	void cannnonUpgradeClicked(int);
 	bool checkTime();
 	void loadLevel(int);
 	void cleanMem();
 	void minusHP();
+
+	void renderTerrain();
+	void renderSkybox();
+	void renderCannon();
+	void renderTrain();
+	void renderBullets();
+	void renderParticles();
+	void renderHUD();
+	void renderTutorial();
 
 	SCameraState player;
 	vec3 LightPos;

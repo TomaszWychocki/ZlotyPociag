@@ -9,7 +9,8 @@ public:
 	Particle(float, float, float);
 	float randMToN(float, float);
 	~Particle();
-	void show();
+	void calculate();
+	void Render();
 	bool end = false;
 
 private: 

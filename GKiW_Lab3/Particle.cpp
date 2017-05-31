@@ -37,33 +37,33 @@ float Particle::randMToN(float M, float N) {
 Particle::~Particle() {
 }
 
-void Particle::show(){
-	glPushMatrix();
-		glDisable(GL_LIGHTING);
-		glEnable(GL_BLEND); 
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-		glPushMatrix();
-		glTranslatef(startPos.x, startPos.y, startPos.z);
-		glRotatef(angle.x, 1, 0, 0);
-		glRotatef(angle.y, 0, 1, 0);
-		glRotatef(angle.z, 0, 0, 1);
-		glTranslatef(-startPos.x, -startPos.y, -startPos.z);
-		for (int i = 0; i < 100; i++) {
-			glPushMatrix();
-				glColor4f(color[i].x, color[i].y, color[i].z, (0.3 - Offset) / 0.3);
-				glTranslatef(startPos.x + (par[i].x * Offset), startPos.y + (par[i].y * Offset), startPos.z + (par[i].z * Offset));
-				glutSolidSphere(0.04, 5, 5);
-			glPopMatrix();
-		}
-		glPopMatrix();
-
-		glEnable(GL_LIGHTING);
-		glDisable(GL_BLEND);
-	glPopMatrix();
-
+void Particle::calculate(){
 	Offset += 0.005;
 
 	if (Offset > 0.3)
 		end = true;
+}
+
+void Particle::Render() {
+	glDisable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glPushMatrix();
+	glTranslatef(startPos.x, startPos.y, startPos.z);
+	glRotatef(angle.x, 1, 0, 0);
+	glRotatef(angle.y, 0, 1, 0);
+	glRotatef(angle.z, 0, 0, 1);
+	glTranslatef(-startPos.x, -startPos.y, -startPos.z);
+	for (int i = 0; i < 100; i++) {
+		glPushMatrix();
+		glColor4f(color[i].x, color[i].y, color[i].z, (0.3 - Offset) / 0.3);
+		glTranslatef(startPos.x + (par[i].x * Offset), startPos.y + (par[i].y * Offset), startPos.z + (par[i].z * Offset));
+		glutSolidSphere(0.04, 5, 5);
+		glPopMatrix();
+	}
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);
+	glDisable(GL_BLEND);
 }

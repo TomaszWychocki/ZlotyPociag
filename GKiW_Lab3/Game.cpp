@@ -19,44 +19,8 @@ Game::~Game() {
 
 }
 
-void Game::showScene() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-#pragma region Scena
-
-	if (currentLevel == 0) {
-		tutorial->Render();
-		glPushMatrix();
-			terrain->Render();
-		glPopMatrix();
-		skybox->Render();
-		return;
-	}
-
-	gluLookAt(
-		this->player.pos.x, this->player.pos.y, this->player.pos.z,
-		this->player.pos.x + this->player.dir.x, this->player.pos.y + this->player.dir.y, this->player.pos.z + this->player.dir.z,
-		0.0f, 1.0f, 0.0f
-	);
-
-	glPushMatrix();
-		terrain->Render();
-	glPopMatrix();
-
-	skybox->Render();
-
-	glPushMatrix();
-		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
-		glRotatef(hAngle-90, 0, 1, 0);
-		glRotatef(vAngle, 0, 0, 1);
-		cannon->Render();
-	glPopMatrix();
-
-	glPushMatrix();
-		train->Render();
-	glPopMatrix();
+void Game::calculateScene() {
+	train->Calculate();
 
 	//Kule
 	for (size_t i = 0; i < bullets.size(); i++) {
@@ -84,7 +48,7 @@ void Game::showScene() {
 			if (hp < 0) hp = 0;
 		}
 		else
-			bullets[i]->show();
+			bullets[i]->move();
 	}
 
 	if (train->bulletReady) {
@@ -101,7 +65,7 @@ void Game::showScene() {
 			particles.erase(particles.begin() + i);
 		}
 		else
-			particles[i]->show();
+			particles[i]->calculate();
 	}
 
 	//Pociag
@@ -124,29 +88,7 @@ void Game::showScene() {
 		train->number = -1;
 	}
 
-	drawViewfinder();
-#pragma endregion
-
-	if (currentLevel < 5) {
-		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
-		printText(20, 40, 10, "Czas: " + std::to_string(level->getRemainingTime()), 1, 1, 1);
-		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
-		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
-	}
-	else {
-		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
-		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
-		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
-		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
-	}
-
-	if (this->cannon->reloading > 0) {
-		if(timer++ % 30 < 15)
-			printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
-	}
-	else
+	if (this->cannon->reloading < 0) 
 		timer = 0;
 }
 
@@ -321,4 +263,69 @@ void Game::cleanMem(){
 
 void Game::minusHP(){
 	hp -= rand() % (5 - 1 + 1) + 1;
+}
+
+void Game::renderTerrain() {
+	terrain->Render();
+}
+
+void Game::renderSkybox() {
+	skybox->Render();
+}
+
+void Game::renderCannon() {
+	glPushMatrix();
+		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
+		glRotatef(hAngle - 90, 0, 1, 0);
+		glRotatef(vAngle, 0, 0, 1);
+		cannon->Render();
+	glPopMatrix();
+}
+
+void Game::renderTrain() {
+	glPushMatrix();
+		train->Render();
+	glPopMatrix();
+}
+
+void Game::renderBullets() {
+	for (size_t i = 0; i < bullets.size(); i++) {
+		glPushMatrix();
+			bullets[i]->Render();
+		glPopMatrix();
+	}
+}
+
+void Game::renderParticles() {
+	for (size_t i = 0; i < particles.size(); i++) {
+		glPushMatrix();
+		particles[i]->Render();
+		glPopMatrix();
+	}
+}
+
+void Game::renderHUD() {
+	drawViewfinder();
+
+	if (currentLevel < 5) {
+		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
+		printText(20, 40, 10, "Czas: " + std::to_string(level->getRemainingTime()), 1, 1, 1);
+		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
+		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
+	}
+	else {
+		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
+		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
+		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
+		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
+	}
+
+	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
+		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
+}
+
+void Game::renderTutorial() {
+	tutorial->Render();
 }

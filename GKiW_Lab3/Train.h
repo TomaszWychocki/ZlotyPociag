@@ -12,6 +12,7 @@ public:
 	Train(float s, bool isBoss);
 	~Train();
 	void LoadModels();
+	void Calculate();
 	void Render();
 	void setDefault(int);
 	void showTrainByNumber(int);
@@ -37,5 +38,6 @@ private:
 	bool dir = false;
 	bool isDead;
 	int HPdelta = 0;
+	float a = 0.0;
 };
 
