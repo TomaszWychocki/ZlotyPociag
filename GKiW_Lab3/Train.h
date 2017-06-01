@@ -1,6 +1,8 @@
 #pragma once
 #include "Model.h"
 #include <irrKlang.h>
+#include <vector>
+#include "Particle.h" 
 
 class Train
 {
@@ -9,7 +11,7 @@ class Train
 	};
 
 public:
-	Train(float s, bool isBoss);
+	Train(float s, bool isBoss, std::vector<Particle*> *v);
 	~Train();
 	void LoadModels();
 	void Calculate();
@@ -39,5 +41,6 @@ private:
 	bool isDead;
 	int HPdelta = 0;
 	float a = 0.0;
+	std::vector<Particle*> *particleVector;
 };
 

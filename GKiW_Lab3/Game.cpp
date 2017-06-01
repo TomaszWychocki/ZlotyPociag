@@ -7,7 +7,7 @@ Game::Game() {
 	cash = 0;
 	se = irrklang::createIrrKlangDevice();
 	this->terrain = new Model("terrain.3ds");
-	train = new Train(0, false);
+	train = new Train(0, false, &particles);
 	this->cannon = new Cannon();
 	this->loadLevel(currentLevel);
 	this->tutorial = new Tutorial(train);

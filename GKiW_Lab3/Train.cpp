@@ -3,10 +3,11 @@
 #include <iostream>
 
 
-Train::Train(float s, bool isBoss) {
+Train::Train(float s, bool isBoss, std::vector<Particle*> *v) {
 	this->speed = s;
 	this->isBoss = isBoss;
 	isDead = false;
+	particleVector = v;
 	se = irrklang::createIrrKlangDevice();
 	LoadModels();
 	setRandomTrain();
@@ -28,6 +29,13 @@ void Train::LoadModels() {
 void Train::Calculate() {
 	if (HP <= 0 && !isDead) {
 		se->play2D("sounds/locomotive.wav");
+		for (int i = 0; i <= 11; i++) {
+			se->play2D("sounds/explosion.wav");
+			if (dir)
+				particleVector->push_back(new Particle((posX + 1.0f) + (float)i / 2, 0.3f, 0.0f));
+			else
+				particleVector->push_back(new Particle((posX - 1.0f) - (float)i / 2, 0.3f, 0.0f));
+		}
 		number = currentTrain;
 		isDead = true;
 	}
