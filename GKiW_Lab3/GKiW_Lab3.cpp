@@ -145,7 +145,7 @@ void onMouseButton(int button, int state, int x, int y) {
 	}
 	else if (CurrentState == play && game->currentLevel > 0) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-			if (true) { //game->cannon->reloading == 0
+			if (game->cannon->reloading == 0) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
 				game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
@@ -188,6 +188,15 @@ void OnTimer(int id) {
 		game->player.velRX *= 0.9;
 		game->player.velRY *= 0.9;
 
+		if (game->currentLevel == 5) {
+			game->player.velX *= 0.7;
+			game->player.pos.x += game->player.velX;
+			if (game->player.pos.x < -3.75f)
+				game->player.pos.x = -3.75f;
+			if (game->player.pos.x > 4.0f)
+				game->player.pos.x = 4.0f;
+		}
+
 		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 
 		if (keystate['w']) {
@@ -201,6 +210,12 @@ void OnTimer(int id) {
 		}
 		if (keystate['d']) {
 			game->player.velRX -= 0.07;
+		}
+		if (keystate['q'] && game->currentLevel == 5) {
+			game->player.velX -= 0.01f;
+		}
+		if (keystate['e'] && game->currentLevel == 5) {
+			game->player.velX += 0.01f;
 		}
 
 		if (verticalAngle > 90) verticalAngle = 90;

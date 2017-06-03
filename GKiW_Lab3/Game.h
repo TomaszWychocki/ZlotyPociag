@@ -21,6 +21,7 @@ class Game
 		vec3 dir;
 		float speed;
 		float velRY, velRX;
+		float velX;
 	};
 
 public:
@@ -49,7 +50,7 @@ public:
 	Cannon *cannon;
 	Tutorial *tutorial;
 	std::string message = "";
-	int currentLevel = 5;
+	int currentLevel = 0;
 	int points;
 	int cash;
 	int hp = 100;
@@ -57,12 +58,14 @@ public:
 	float vAngle;
 	float windOffset;
 	bool windChange;
+	float posOffset;
 
 	std::vector < Bullet* > bullets;
 	std::vector < Particle* > particles;
 
 private:
 	int timer;
+	GLuint wf, bg;
 	Model *terrain;
 	Train *train;
 	irrklang::ISoundEngine* se;

@@ -28,7 +28,7 @@ void Tutorial::Render(){
 		this->player.pos.z = 1.5f;
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "W grze bedziesz musial oddawac celne strzaly w kierunku pociagow.", 1, 1, 1);
-		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Za ten pociag otrzymasz 50$ i punkty", 1, 1, 1);
+		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Za zwykly pociag otrzymasz 50$ i punkty", 1, 1, 1);
 		train->showTrainByNumber(0);
 	}
 	else if (frame == 3) {
@@ -36,7 +36,7 @@ void Tutorial::Render(){
 		this->player.pos.y = 0.5f;
 		this->player.pos.z = 1.5f;
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
-		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Staraj sie nie strzelac do tego pociagu!", 1, 1, 1);
+		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Staraj sie nie strzelac do niebieskiego pociagu!", 1, 1, 1);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Z jego zniszczenie zostana Ci odebrane pieniadez i punkty.", 1, 1, 1);
 		train->showTrainByNumber(1);
 	}
@@ -45,7 +45,7 @@ void Tutorial::Render(){
 		this->player.pos.y = 0.5f;
 		this->player.pos.z = 1.5f;
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
-		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Ten pociag da Ci najwiecej!", 1, 1, 1);
+		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Ten zielony pociag przewozi ogromna ilosc pieniedzy!", 1, 1, 1);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Z jego zniszczenie otrzymasz dodatkowe 150$ i punkty!", 1, 1, 1);
 		train->showTrainByNumber(2);
 	}
@@ -70,7 +70,9 @@ void Tutorial::Render(){
 	else
 		end = true;
 
-	if (timer++ > 500) {
+	timer += 1.5f;
+
+	if (timer > 500) {
 		timer = 0;
 		frame++;
 	}

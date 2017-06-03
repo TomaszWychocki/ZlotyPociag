@@ -19,9 +19,9 @@ public:
 
 private:
 	int maxTimes[5] = { 60,50,40,40,100 };
-	int maxPoints[5] = { 100,150,180,220,9999 };
+	int maxPoints[5] = { 100,150,180,220,1000 };
 	//int maxPoints[5] = { 1,2,3,4,5 };
-	int trainPoints[5] = { 12, 16, 20, 22, 10000 };
+	int trainPoints[5] = { 12, 16, 20, 22, 2000 };
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };
 	float startPosX[5] = { -2, 2, 3, 0, 2 };
 	float startPosZ[5] = { 7, 10, 12, 14, 16 };

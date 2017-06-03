@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Game.h"
 #include <iostream>
 
@@ -12,6 +12,31 @@ Game::Game() {
 	this->loadLevel(currentLevel);
 	this->tutorial = new Tutorial(train);
 	this->skybox = new Skybox(60.0f);
+
+	int width = glutGet(GLUT_WINDOW_WIDTH);
+	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	wf = glGenLists(1);
+	glNewList(wf, GL_COMPILE);
+		glBegin(GL_LINES);
+			glVertex2f((width / 2) - 5, (height / 2) + 20);
+			glVertex2f((width / 2) + 5, (height / 2) + 20);
+			glVertex2f((width / 2) - 10, (height / 2) + 0);
+			glVertex2f((width / 2) + 10, (height / 2) + 0);
+			glVertex2f((width / 2) - 15, (height / 2) - 20);
+			glVertex2f((width / 2) + 15, (height / 2) - 20);
+			glVertex2f((width / 2) - 20, (height / 2) - 40);
+			glVertex2f((width / 2) + 20, (height / 2) - 40);
+		glEnd();
+	glEndList();
+	bg = glGenLists(1);
+	glNewList(bg, GL_COMPILE);
+		glBegin(GL_QUADS);
+			glVertex2f(0, 0);
+			glVertex2f(300, 0);
+			glVertex2f(300, 120);
+			glVertex2f(0, 120);
+		glEnd();
+	glEndList();
 }
 
 
@@ -20,6 +45,7 @@ Game::~Game() {
 }
 
 void Game::calculateScene() {
+	train->playerPosX = player.pos.x;
 	train->Calculate();
 
 	//Kule
@@ -236,6 +262,7 @@ void Game::loadLevel(int l) {
 
 		windOffset = 0.0f;
 		windChange = true;
+		posOffset = 0.0f;
 	}
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
@@ -248,6 +275,7 @@ void Game::loadLevel(int l) {
 
 	this->player.velRX = 0;
 	this->player.velRY = 0;
+	this->player.velX = 0;
 
 	this->timer = 0;
 	cannon->reloading = 0;
@@ -314,21 +342,27 @@ void Game::renderHUD() {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
 		printText(20, 40, 10, "Czas: " + std::to_string(level->getRemainingTime()), 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + windOffset) * 10000)) + "m/s", 1, 1, 1);
+		if (windChange)
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 1, 0.8f, 0.8f);
+		else
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 0.8f, 1, 0.8f);
 		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 	else {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
 		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + windOffset) * 10000)) + "m/s", 1, 1, 1);
+		if(windChange)
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 1, 0.8f, 0.8f);
+		else
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 0.8f, 1, 0.8f);
 		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 
 	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
 		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
 
-	drawViewfinder();
+	drawHUDelements(wf, bg);
 }
 
 void Game::renderTutorial() {

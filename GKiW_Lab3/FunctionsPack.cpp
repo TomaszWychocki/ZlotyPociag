@@ -33,7 +33,7 @@ void printText(float x, float y, int spacing, std::string str, float r, float g,
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void drawViewfinder() {
+void drawHUDelements(GLuint wf, GLuint bg) {
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	glMatrixMode(GL_PROJECTION);
@@ -48,26 +48,12 @@ void drawViewfinder() {
 	glPushMatrix();
 	glLoadIdentity();
 
-	glBegin(GL_LINES);
-		glVertex2f((width / 2) - 5, (height / 2) + 20);
-		glVertex2f((width / 2) + 5, (height / 2) + 20);
-		glVertex2f((width / 2) - 10, (height / 2) + 0);
-		glVertex2f((width / 2) + 10, (height / 2) + 0);
-		glVertex2f((width / 2) - 15, (height / 2) - 20);
-		glVertex2f((width / 2) + 15, (height / 2) - 20);
-		glVertex2f((width / 2) - 20, (height / 2) - 40);
-		glVertex2f((width / 2) + 20, (height / 2) - 40);
-	glEnd();
+	glCallList(wf);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(0, 0, 0, 0.5f);
-	glBegin(GL_QUADS);
-		glVertex2f(0, 0);
-		glVertex2f(300, 0);
-		glVertex2f(300, 120);
-		glVertex2f(0, 120);
-	glEnd();
+	glCallList(bg);
 	glDisable(GL_BLEND);
 
 	glPopMatrix();
