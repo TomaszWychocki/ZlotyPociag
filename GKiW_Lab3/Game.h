@@ -49,12 +49,14 @@ public:
 	Cannon *cannon;
 	Tutorial *tutorial;
 	std::string message = "";
-	int currentLevel = 1;
+	int currentLevel = 5;
 	int points;
 	int cash;
 	int hp = 100;
 	float hAngle;
 	float vAngle;
+	float windOffset;
+	bool windChange;
 
 	std::vector < Bullet* > bullets;
 	std::vector < Particle* > particles;

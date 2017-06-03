@@ -225,6 +225,17 @@ void Game::loadLevel(int l) {
 		this->player.pos.x = level->sX;
 		this->player.pos.y = 0.3f;
 		this->player.pos.z = level->sZ;
+
+		//Mgla
+		float fcolor[] = { 0.875f, 0.957f, 1.0f, 1.0f };
+		glFogi(GL_FOG_MODE, GL_LINEAR);
+		glFogfv(GL_FOG_COLOR, fcolor);
+		glFogf(GL_FOG_START, 1.0f);
+		glFogf(GL_FOG_END, 40.0f + 120.0f * ((5.0f - l) / 5));
+		glEnable(GL_FOG);
+
+		windOffset = 0.0f;
+		windChange = true;
 	}
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
@@ -237,14 +248,6 @@ void Game::loadLevel(int l) {
 
 	this->player.velRX = 0;
 	this->player.velRY = 0;
-
-	//Mgla
-	GLfloat density = 0.015 * l;
-	GLfloat fogColor[4] = { 0.5, 0.5, 0.5, 1.0 };
-	glFogi(GL_FOG_MODE, GL_EXP2);
-	glFogfv(GL_FOG_COLOR, fogColor);
-	glFogf(GL_FOG_DENSITY, density);
-	//glEnable(GL_FOG);
 
 	this->timer = 0;
 	cannon->reloading = 0;
@@ -270,7 +273,9 @@ void Game::renderTerrain() {
 }
 
 void Game::renderSkybox() {
+	if (currentLevel > 0) glDisable(GL_FOG);
 	skybox->Render();
+	if(currentLevel > 0) glEnable(GL_FOG);
 }
 
 void Game::renderCannon() {
@@ -305,25 +310,25 @@ void Game::renderParticles() {
 }
 
 void Game::renderHUD() {
-	drawViewfinder();
-
 	if (currentLevel < 5) {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
 		printText(20, 40, 10, "Czas: " + std::to_string(level->getRemainingTime()), 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + windOffset) * 10000)) + "m/s", 1, 1, 1);
 		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 	else {
 		printText(20, 20, 10, "Poziom: " + std::to_string(currentLevel), 1, 1, 1);
 		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
-		printText(20, 80, 10, "Wiatr: " + std::to_string(int(level->wind * 10000)) + "m/s", 1, 1, 1);
+		printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + windOffset) * 10000)) + "m/s", 1, 1, 1);
 		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 
 	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
 		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
+
+	drawViewfinder();
 }
 
 void Game::renderTutorial() {

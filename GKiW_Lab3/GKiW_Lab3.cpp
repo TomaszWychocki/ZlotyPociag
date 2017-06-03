@@ -156,7 +156,7 @@ void onMouseButton(int button, int state, int x, int y) {
 													game->player.dir.z, 
 													game->cannon->ballSpeed + game->cannon->ballSpeedLevel, 
 													verticalAngle, 
-													game->level->wind));
+													game->level->wind + game->windOffset));
 			}
 		}
 	}
@@ -213,7 +213,7 @@ void OnTimer(int id) {
 		game->player.dir.y = sin(verticalAngle*3.14 / 180);
 		game->player.dir.z = cos(verticalAngle*3.14 / 180) * cos(horizontalAngle*3.14 / 180);
 
-		std::cout << horizontalAngle << " " << verticalAngle << std::endl;
+		//std::cout << horizontalAngle << " " << verticalAngle << std::endl;
 
 		if (game->cannon->reloading == 0 && keystate[' ']) {
 			se->play2D("sounds/cannon.wav");
@@ -226,7 +226,7 @@ void OnTimer(int id) {
 				game->player.dir.z,
 				game->cannon->ballSpeed + game->cannon->ballSpeedLevel,
 				verticalAngle,
-				game->level->wind));
+				game->level->wind + game->windOffset));
 		}
 
 		// Znalezienie kierunku prostopadlego
@@ -236,6 +236,21 @@ void OnTimer(int id) {
 
 		if (game->cannon->reloading > 0)
 			game->cannon->reloading--;
+
+		if ((int)Tm % 40 < 10) {
+			float last = game->windOffset;
+			if (rand() % 10 >= 5) {
+				game->windOffset += 0.0001f;
+				game->windChange = true;
+			}
+			else {
+				game->windOffset -= 0.0001f;
+				game->windChange = false;
+			}
+
+			if (abs(game->windOffset * 10000) > game->currentLevel*2)
+				game->windOffset = last;
+		}
 	}
 
 	if (CurrentState == postLevel) {

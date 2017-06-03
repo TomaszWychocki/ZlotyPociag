@@ -59,6 +59,17 @@ void drawViewfinder() {
 		glVertex2f((width / 2) + 20, (height / 2) - 40);
 	glEnd();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(0, 0, 0, 0.5f);
+	glBegin(GL_QUADS);
+		glVertex2f(0, 0);
+		glVertex2f(300, 0);
+		glVertex2f(300, 120);
+		glVertex2f(0, 120);
+	glEnd();
+	glDisable(GL_BLEND);
+
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
