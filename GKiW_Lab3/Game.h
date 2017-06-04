@@ -9,6 +9,7 @@
 #include <irrKlang.h>
 #include "Tutorial.h"
 #include "Skybox.h"
+#include "Collision.h"
 
 class Game
 {
@@ -50,7 +51,7 @@ public:
 	Cannon *cannon;
 	Tutorial *tutorial;
 	std::string message = "";
-	int currentLevel = 0;
+	int currentLevel = 1;
 	int points;
 	int cash;
 	int hp = 100;
@@ -70,5 +71,6 @@ private:
 	Train *train;
 	irrklang::ISoundEngine* se;
 	Skybox *skybox;
+	Collision *collision;
 };
 

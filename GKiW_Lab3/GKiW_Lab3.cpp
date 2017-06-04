@@ -43,13 +43,13 @@ int main(int argc, char* argv[])
 	glutReshapeFunc(OnReshape);
 	glutKeyboardFunc(OnKeyPress);
 	glutKeyboardUpFunc(OnKeyUp);
-	glutSpecialFunc(OnSpecialKeyPress); // klawisze specjalne (strzalki, F1-F12, PgUp/PgDn, Home, End, Delete, Insert)
+	glutSpecialFunc(OnSpecialKeyPress);
 	glutSpecialUpFunc(OnSpecialKeyUp);
 	glutPassiveMotionFunc(OnMove);
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	glutFullScreen();
+	//glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
@@ -145,7 +145,7 @@ void onMouseButton(int button, int state, int x, int y) {
 	}
 	else if (CurrentState == play && game->currentLevel > 0) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-			if (game->cannon->reloading == 0) { //game->cannon->reloading == 0
+			if (true) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
 				game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,

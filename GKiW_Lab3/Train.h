@@ -25,6 +25,8 @@ public:
 	int number;
 	float playerPosX;
 	float playerPosZ;
+	float posX;
+	bool dir = false;
 	vec3 shootDir;
 	vec3 startPos;
 
@@ -35,9 +37,7 @@ private:
 	void setRandomTrain();
 	int currentTrain = 0;
 	float timer;
-	float posX;
 	float posY;
-	bool dir = false;
 	bool isDead;
 	int HPdelta = 0;
 	float a = 0.0;

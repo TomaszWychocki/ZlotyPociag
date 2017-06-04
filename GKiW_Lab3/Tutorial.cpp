@@ -37,7 +37,7 @@ void Tutorial::Render(){
 		this->player.pos.z = 1.5f;
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Staraj sie nie strzelac do niebieskiego pociagu!", 1, 1, 1);
-		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Z jego zniszczenie zostana Ci odebrane pieniadez i punkty.", 1, 1, 1);
+		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Z jego zniszczenie zostana Ci odebrane pieniadze i punkty.", 1, 1, 1);
 		train->showTrainByNumber(1);
 	}
 	else if (frame == 4) {

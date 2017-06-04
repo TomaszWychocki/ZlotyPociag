@@ -5,13 +5,14 @@
 Game::Game() {
 	points = 0;
 	cash = 0;
-	se = irrklang::createIrrKlangDevice();
 	this->terrain = new Model("terrain.3ds");
 	train = new Train(0, false, &particles);
+	this->collision = new Collision("models\\terr.txt", train);
 	this->cannon = new Cannon();
-	this->loadLevel(currentLevel);
 	this->tutorial = new Tutorial(train);
 	this->skybox = new Skybox(60.0f);
+	se = irrklang::createIrrKlangDevice();
+	this->loadLevel(currentLevel);
 
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
@@ -50,19 +51,22 @@ void Game::calculateScene() {
 
 	//Kule
 	for (size_t i = 0; i < bullets.size(); i++) {
-		if (bullets[i]->state.pos.y < 0.1f) {
+		bool col = collision->isCollision(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z);
+		bool colT = collision->isCollisionWithTrain(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z);
+
+		if (colT && bullets[i]->state.angle < 900.0f) { //KOLIZJA Z POCIAGIEM
 			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
 			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
-		}
-		else if (bullets[i]->state.pos.z <= 0 && bullets[i]->state.angle < 900.0f) { //SYMULOWANA KOLIZJA (POPRWAWIC)
-			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			se->play2D("sounds/explosion.wav");
-			delete bullets[i];
-			bullets.erase(bullets.begin() + i);
-			train->HP -= ((cannon->ballPower * cannon->ballPowerLevel * 1.5f) + rand()%20);
+			train->HP -= ((cannon->ballPower * cannon->ballPowerLevel * 1.5f) + rand() % 20);
 			if (train->HP < 0) train->HP = 0;
+		}
+		else if (bullets[i]->state.pos.y < -2.0f || col) { //kolizja z terenem  
+			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
+			se->play2D("sounds/explosion.wav");
+			delete bullets[i];
+			bullets.erase(bullets.begin() + i);
 		}
 		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
 			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.5f) {
@@ -298,6 +302,7 @@ void Game::minusHP(){
 
 void Game::renderTerrain() {
 	terrain->Render();
+	//collision->Render();
 }
 
 void Game::renderSkybox() {
