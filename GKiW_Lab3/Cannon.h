@@ -11,7 +11,6 @@ public:
 	int fireRate = 6;
 	int ballPower = 20;
 	int ballSpeed = 2;
-	//CannonModel
 
 	//Timer
 	int reloading = 0;

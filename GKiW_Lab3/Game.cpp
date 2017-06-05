@@ -212,7 +212,6 @@ void Game::loadLevel(int l) {
 	glLoadIdentity();
 	gluPerspective(60.0f, (float)glutGet(GLUT_WINDOW_WIDTH) / glutGet(GLUT_WINDOW_HEIGHT), .01f, 120.0f);
 
-	// Ustawiamy komponent ambient naszej sceny - wartosc niezalezna od swiatla (warto zresetowac)
 	float gl_amb[] = { 0.01f, 0.01f, 0.01f, 1.0f };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gl_amb);
 

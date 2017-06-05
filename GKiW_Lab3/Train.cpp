@@ -55,12 +55,20 @@ void Train::Calculate() {
 			setRandomTrain();
 	}
 
-	if (dir)
-		timer -= speed;
-	else
-		timer += speed;
+	if (currentTrain == 1) {
+		if (dir)
+			timer -= speed * 2.0f;
+		else
+			timer += speed * 2.0f;
+	}
+	else {
+		if (dir)
+			timer -= speed;
+		else
+			timer += speed;
+	}
 	posX = (timer / 10);
-	//std::cout << timer << std::endl;
+
 
 	if (isBoss) {
 			if (dir)

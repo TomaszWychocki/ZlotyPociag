@@ -11,6 +11,11 @@
 #include <time.h>
 #include <irrKlang.h>
 
+/*
+	TODO:
+	- Pokazywanie paska ladowania broni
+*/
+
 //int w = 1366;
 //int h = 768;
 int w = 0;
@@ -49,7 +54,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	//glutFullScreen();
+	glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
@@ -58,8 +63,6 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
-#pragma region Obsluga wejscia
 
 bool keystate[256];
 bool keystate_special[256];
@@ -100,7 +103,6 @@ void OnMove(int x, int y) {
 		mouseX = x;
 		mouseY = y;
 	}
-	//std::cout << "X:" << x << " Y:" << y << std::endl;
 }
 
 void onMouseButton(int button, int state, int x, int y) {
@@ -145,9 +147,9 @@ void onMouseButton(int button, int state, int x, int y) {
 	}
 	else if (CurrentState == play && game->currentLevel > 0) {
 		if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-			if (true) { //game->cannon->reloading == 0
+			if (game->cannon->reloading == 0) { //game->cannon->reloading == 0
 				se->play2D("sounds/cannon.wav");
-				game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
+				game->cannon->reloading = (game->cannon->fireRate - game->cannon->fireRateLevel) * 25;
 				game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2f,
 													game->player.pos.y + game->player.dir.y * 1.2f,
 													game->player.pos.z + game->player.dir.z * 1.2f,
@@ -166,8 +168,6 @@ void onMouseButton(int button, int state, int x, int y) {
 		}
 	}
 }
-
-#pragma endregion
 
 void OnTimer(int id) {
 
@@ -232,7 +232,7 @@ void OnTimer(int id) {
 
 		if (game->cannon->reloading == 0 && keystate[' ']) {
 			se->play2D("sounds/cannon.wav");
-			game->cannon->reloading = (game->cannon->fireRate - (game->cannon->fireRateLevel)) * 40;
+			game->cannon->reloading = (game->cannon->fireRate - game->cannon->fireRateLevel) * 25;
 			game->bullets.push_back(new Bullet(game->player.pos.x + game->player.dir.x * 1.2,
 				game->player.pos.y + game->player.dir.y * 1.2,
 				game->player.pos.z + game->player.dir.z * 1.2,
@@ -388,11 +388,6 @@ void OnRender() {
 }
 
 void OnReshape(int width, int height) {
-	//glutReshapeWindow(w, h);
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//glViewport(0, 0, width, height);
-	//gluPerspective(60.0f, (float)width / height, .01f, 100.0f);
 	h = height;
 	w = width;
 
