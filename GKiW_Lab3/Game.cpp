@@ -6,7 +6,7 @@ Game::Game() {
 	points = 0;
 	cash = 0;
 	this->terrain = new Model("terrain.3ds");
-	train = new Train(0, false, &particles);
+	train = new Train(0, false, &particles, &startTrainHP);
 	this->collision = new Collision("models\\terr.txt", train);
 	this->cannon = new Cannon();
 	this->tutorial = new Tutorial(train);
@@ -39,7 +39,6 @@ Game::Game() {
 		glEnd();
 	glEndList();
 }
-
 
 Game::~Game() {
 
@@ -266,6 +265,7 @@ void Game::loadLevel(int l) {
 		windOffset = 0.0f;
 		windChange = true;
 		posOffset = 0.0f;
+		totalLoadingTime = (cannon->fireRate - cannon->fireRateLevel) * 25;
 	}
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
@@ -357,16 +357,16 @@ void Game::renderHUD() {
 		printText(20, 40, 10, "Zdrowie: " + std::to_string(hp) + "%", 1, 1, 1);
 		printText(20, 60, 10, "Punkty: " + std::to_string(level->curentPoints) + "/" + std::to_string(level->requiredPoints), 1, 1, 1);
 		if(windChange)
-			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 1, 0.8f, 0.8f);
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s +", 1, 0.8f, 0.8f);
 		else
-			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s", 0.8f, 1, 0.8f);
+			printText(20, 80, 10, "Wiatr: " + std::to_string(int((level->wind + abs(windOffset)) * 10000)) + "m/s -", 0.8f, 1, 0.8f);
 		printText(20, 100, 10, "Pociag: " + std::to_string(int(train->HP)) + "HP", 1, 1, 1);
 	}
 
 	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
-		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, 120, 5, "Ladowanie pocisku...", 1, 0, 0);
+		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, (glutGet(GLUT_WINDOW_HEIGHT) / 2) + 100, 5, "Ladowanie pocisku...", 0, 0, 1);
 
-	drawHUDelements(wf, bg);
+	drawHUDelements(wf, bg, cannon->reloading / totalLoadingTime, train->HP/ startTrainHP);
 }
 
 void Game::renderTutorial() {

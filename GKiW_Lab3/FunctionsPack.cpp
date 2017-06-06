@@ -33,7 +33,7 @@ void printText(float x, float y, int spacing, std::string str, float r, float g,
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void drawHUDelements(GLuint wf, GLuint bg) {
+void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
 	int width = glutGet(GLUT_WINDOW_WIDTH);
 	int height = glutGet(GLUT_WINDOW_HEIGHT);
 	glMatrixMode(GL_PROJECTION);
@@ -49,6 +49,26 @@ void drawHUDelements(GLuint wf, GLuint bg) {
 	glLoadIdentity();
 
 	glCallList(wf);
+
+	//Ladowanie pocisku
+	if (loading > 0) {
+		glColor3f(1, 1.0f - loading, 0);
+		glBegin(GL_QUADS);
+			glVertex2f((width / 2) - 30, (height / 2) - 40 + (1 - loading) * 60);
+			glVertex2f((width / 2) - 35, (height / 2) - 40 + (1 - loading) * 60);
+			glVertex2f((width / 2) - 35, (height / 2) + 20);
+			glVertex2f((width / 2) - 30, (height / 2) + 20);
+		glEnd();
+	}
+
+	//Hp pociagu
+	glColor3f(1 - Hp, 0.75f * Hp, 0);
+	glBegin(GL_QUADS);
+		glVertex2f((width / 2) + 30, (height / 2) - 40 + (1 - Hp) * 60);
+		glVertex2f((width / 2) + 35, (height / 2) - 40 + (1 - Hp) * 60);
+		glVertex2f((width / 2) + 35, (height / 2) + 20);
+		glVertex2f((width / 2) + 30, (height / 2) + 20);
+	glEnd();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

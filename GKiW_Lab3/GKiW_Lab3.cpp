@@ -11,11 +11,6 @@
 #include <time.h>
 #include <irrKlang.h>
 
-/*
-	TODO:
-	- Pokazywanie paska ladowania broni
-*/
-
 //int w = 1366;
 //int h = 768;
 int w = 0;

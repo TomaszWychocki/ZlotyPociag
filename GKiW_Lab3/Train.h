@@ -11,7 +11,7 @@ class Train
 	};
 
 public:
-	Train(float s, bool isBoss, std::vector<Particle*> *v);
+	Train(float s, bool isBoss, std::vector<Particle*> *v, float *h);
 	~Train();
 	void LoadModels();
 	void Calculate();
@@ -41,6 +41,7 @@ private:
 	bool isDead;
 	int HPdelta = 0;
 	float a = 0.0;
+	float *startHP;
 	std::vector<Particle*> *particleVector;
 };
 

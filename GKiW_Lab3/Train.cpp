@@ -3,10 +3,11 @@
 #include <iostream>
 
 
-Train::Train(float s, bool isBoss, std::vector<Particle*> *v) {
+Train::Train(float s, bool isBoss, std::vector<Particle*> *v, float *h) {
 	this->speed = s;
 	this->isBoss = isBoss;
 	isDead = false;
+	startHP = h;
 	particleVector = v;
 	se = irrklang::createIrrKlangDevice();
 	LoadModels();
@@ -122,7 +123,9 @@ void Train::setDefault(int hpd) {
 	dir = false;
 	isDead = false;
 	HPdelta = hpd;
-	if (isBoss) HP = 1000;	
+	if (isBoss) {
+		HP = 1000;
+	}
 	setRandomTrain();
 }
 
@@ -156,6 +159,7 @@ void Train::setRandomTrain() {
 	if (!isBoss) {
 		HP = HPdelta + (rand() % 51);
 	}
+	*startHP = HP;
 	isDead = false;
 	bulletReady = false;
 

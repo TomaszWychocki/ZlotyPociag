@@ -51,7 +51,7 @@ public:
 	Cannon *cannon;
 	Tutorial *tutorial;
 	std::string message = "";
-	int currentLevel = 2;
+	int currentLevel = 1;
 	int points;
 	int cash;
 	int hp = 100;
@@ -66,6 +66,8 @@ public:
 
 private:
 	int timer;
+	float totalLoadingTime;
+	float startTrainHP;
 	GLuint wf, bg;
 	Model *terrain;
 	Train *train;
