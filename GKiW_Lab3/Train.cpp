@@ -20,11 +20,11 @@ Train::~Train() {
 }
 
 void Train::LoadModels() {
-	trains[0] = new Model("Train.3ds");
-	trains[1]= new Model("Train_blue.3ds");
-	trains[2] = new Model("Train_green.3ds");
-	trains[3] = new Model("Train_gold.3ds");
-	trainCannon = new Model("Train_cannon.3ds");
+	trains[0] = new Model("models\\Train.obj", "models\\textures\\Train.bmp");
+	trains[1]= new Model("models\\Train_blue.obj", "models\\textures\\Train_blue.bmp");
+	trains[2] = new Model("models\\Train_green.obj", "models\\textures\\Train_green.bmp");
+	trains[3] = new Model("models\\Train_gold.obj", "models\\textures\\Train_gold.bmp");
+	trainCannon = new Model("models\\Train_cannon.obj", "models\\textures\\Train_cannon.bmp");
 }
 
 void Train::Calculate() {
@@ -58,9 +58,9 @@ void Train::Calculate() {
 
 	if (currentTrain == 1) {
 		if (dir)
-			timer -= speed * 2.0f;
+			timer -= speed * 1.5f;
 		else
-			timer += speed * 2.0f;
+			timer += speed * 1.5f;
 	}
 	else {
 		if (dir)
@@ -131,7 +131,7 @@ void Train::setDefault(int hpd) {
 
 void Train::showTrainByNumber(int n) {
 	glPushMatrix();
-		glTranslatef(-3.0f, -0.43f, 0.0f);
+		glTranslatef(-1.0f, 0.1f, 0.0f);
 		if (n == 3) {
 			glPushMatrix();
 				glTranslatef(3.23f, 1.1f, 0.0f);
@@ -154,7 +154,7 @@ void Train::setRandomTrain() {
 	if (isBoss) currentTrain = 3;
 
 	posX = 0;
-	posY = -0.43f;
+	posY = 0.1f;
 	dir = !dir;
 	if (!isBoss) {
 		HP = HPdelta + (rand() % 51);

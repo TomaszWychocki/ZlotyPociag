@@ -2,7 +2,7 @@
 #include "Cannon.h"
 
 Cannon::Cannon(){
-	model = new Model("Cannon.3ds");
+	model = new Model("models\\Cannon.obj", "models\\textures\\Cannon.bmp");
 }
 
 

@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	glutFullScreen();
+	//glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();

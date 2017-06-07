@@ -15,10 +15,6 @@ enum state {
 	postLevel, play, menu, highscore, cannonUpgrade, loading, highscores
 };
 
-struct vec3 {
-	float x, y, z;
-};
-
 state CurrentState = menu;
 MainMenu* m_menu;
 CannonUpgradeMenu* cannonMenu;

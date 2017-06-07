@@ -5,7 +5,7 @@
 Game::Game() {
 	points = 0;
 	cash = 0;
-	this->terrain = new Model("terrain.3ds");
+	this->terrain = new Model("models\\terrain.obj", "models\\textures\\terrain.bmp");
 	train = new Train(0, false, &particles, &startTrainHP);
 	this->collision = new Collision("models\\terr.txt", train);
 	this->cannon = new Cannon();
@@ -230,7 +230,7 @@ void Game::loadLevel(int l) {
 #pragma region Swiatlo_ogolne
 
 	float l0_amb[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	float l0_dif[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	float l0_dif[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 	float l0_spe[] = { 0.5f, 0.5f, 0.5f, 0.2f };
 	float l0_pos[] = { 0.0f, 30.0f, 0.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, l0_amb);

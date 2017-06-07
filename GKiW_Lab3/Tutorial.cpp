@@ -70,7 +70,7 @@ void Tutorial::Render(){
 	else
 		end = true;
 
-	timer += 1.5f;
+	timer++;
 
 	if (timer > 500) {
 		timer = 0;
