@@ -158,15 +158,18 @@ void Train::setRandomTrain() {
 	if (r == 18 || r == 19)
 		currentTrain = 2;
 
-	if (isBoss) currentTrain = 3;
+	if (isBoss) {
+		currentTrain = 3;
+		*startHP = 1000;
+	}
 
 	posX = 0;
 	posY = 0.1f;
 	dir = !dir;
 	if (!isBoss) {
 		HP = HPdelta + (rand() % 51);
+		*startHP = HP;
 	}
-	*startHP = HP;
 	isDead = false;
 	bulletReady = false;
 

@@ -66,17 +66,17 @@ bool Collision::isCollisionWithTrain(float x, float y, float z) {
 }
 
 void Collision::Render() {
-	////Teren
-	//for (int w = 0; w <= wMax; w++) {
-	//	for (int k = 0; k <= kMax; k++) {
-	//		for (size_t i = 0; i < positions[w][k].size(); i++) {
-	//			glPushMatrix();
-	//				glTranslatef(positions[w][k][i].x, positions[w][k][i].y, positions[w][k][i].z);
-	//				glutSolidCube(0.05f);
-	//			glPopMatrix();
-	//		}
-	//	}
-	//}
+	//Teren
+	for (int w = 0; w <= wMax; w++) {
+		for (int k = 0; k <= kMax; k++) {
+			for (size_t i = 0; i < positions[w][k].size(); i++) {
+				glPushMatrix();
+					glTranslatef(positions[w][k][i].x, positions[w][k][i].y, positions[w][k][i].z);
+					glutSolidCube(0.05f);
+				glPopMatrix();
+			}
+		}
+	}
 
 	//Pociag
 	glPushMatrix();
