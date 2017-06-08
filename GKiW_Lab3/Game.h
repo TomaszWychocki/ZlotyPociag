@@ -66,6 +66,7 @@ public:
 
 private:
 	int timer;
+	int keysTimer = 300;
 	float totalLoadingTime;
 	float startTrainHP;
 	GLuint wf, bg;

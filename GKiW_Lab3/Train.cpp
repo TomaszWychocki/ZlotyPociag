@@ -21,21 +21,26 @@ Train::~Train() {
 
 void Train::LoadModels() {
 	trains[0] = new Model("models\\Train.obj", "models\\textures\\Train.bmp");
+	printLoading("25");
 	trains[1]= new Model("models\\Train_blue.obj", "models\\textures\\Train_blue.bmp");
+	printLoading("37");
 	trains[2] = new Model("models\\Train_green.obj", "models\\textures\\Train_green.bmp");
+	printLoading("50");
 	trains[3] = new Model("models\\Train_gold.obj", "models\\textures\\Train_gold.bmp");
+	printLoading("62");
 	trainCannon = new Model("models\\Train_cannon.obj", "models\\textures\\Train_cannon.bmp");
+	printLoading("75");
 }
 
 void Train::Calculate() {
 	if (HP <= 0 && !isDead) {
 		se->play2D("sounds/locomotive.wav");
-		for (int i = 0; i <= 11; i++) {
+		for (int i = 0; i <= 8; i++) {
 			se->play2D("sounds/explosion.wav");
 			if (dir)
-				particleVector->push_back(new Particle((posX + 1.0f) + (float)i / 2, 0.3f, 0.0f));
+				particleVector->push_back(new Particle((posX - 0.26097f) + (float)i / 2, 0.3f, 0.0f));
 			else
-				particleVector->push_back(new Particle((posX - 1.0f) - (float)i / 2, 0.3f, 0.0f));
+				particleVector->push_back(new Particle((posX + 0.26097f) - (float)i / 2, 0.3f, 0.0f));
 		}
 		number = currentTrain;
 		isDead = true;
@@ -48,11 +53,11 @@ void Train::Calculate() {
 	}
 
 	if (dir) {
-		if (timer <= -160 && HP > 0)
+		if (timer <= -120 && HP > 0)
 			setRandomTrain();
 	}
 	else {
-		if (timer >= 160 && HP > 0)
+		if (timer >= 120 && HP > 0)
 			setRandomTrain();
 	}
 
@@ -73,22 +78,22 @@ void Train::Calculate() {
 
 	if (isBoss) {
 			if (dir)
-				a = atan2f(playerPosX - (posX + 3.23f), playerPosZ);
+				a = atan2f(playerPosX - (posX + 1.16582f), playerPosZ);
 			else
-				a = atan2f(playerPosX - (posX - 3.23f), playerPosZ);
+				a = atan2f(playerPosX - (posX - 1.16582f), playerPosZ);
 			a = a * 180 / 3.1415;
 
 			if (abs(timer - 20) <= 0.5f || abs(timer - 0) <= 0.5f) {
 				if (dir) {
-					shootDir.x = playerPosX - (posX + 3.23f);
-					startPos.x = posX + 3.23f;
+					shootDir.x = playerPosX - (posX + 1.16582f);
+					startPos.x = posX + 1.16582f;
 				}
 				else {
-					shootDir.x = playerPosX - (posX - 3.23f);
-					startPos.x = posX - 3.23f;
+					shootDir.x = playerPosX - (posX - 1.16582f);
+					startPos.x = posX - 1.16582f;
 				}
-				shootDir.y = -0.37f;
-				startPos.y = 0.7f;
+				shootDir.y = -0.25f;
+				startPos.y = 0.5f;
 				shootDir.z = playerPosZ;
 				startPos.z = 0;
 				float l = sqrt(shootDir.x*shootDir.x + shootDir.y*shootDir.y + shootDir.z*shootDir.z);
@@ -106,9 +111,9 @@ void Train::Render() {
 	if (isBoss) {
 		glPushMatrix();
 			if (dir)
-				glTranslatef(3.23f, 1.1f, 0.0f);
+				glTranslatef(1.16582f, 0.25899f, 0.0f);
 			else
-				glTranslatef(-3.23f, 1.1f, 0.0f);
+				glTranslatef(-1.16582f, 0.25899f, 0.0f);
 			glRotatef(a, 0, 1, 0);
 			trainCannon->Render();
 		glPopMatrix();
@@ -130,11 +135,13 @@ void Train::setDefault(int hpd) {
 }
 
 void Train::showTrainByNumber(int n) {
+	timer++;
 	glPushMatrix();
 		glTranslatef(-1.0f, 0.1f, 0.0f);
 		if (n == 3) {
 			glPushMatrix();
-				glTranslatef(3.23f, 1.1f, 0.0f);
+				glTranslatef(1.16582f, 0.25899f, 0.0f);
+				glRotatef(sin(timer/70)*60.0f, 0, 1, 0);
 				trainCannon->Render();
 			glPopMatrix();
 		}
@@ -166,5 +173,5 @@ void Train::setRandomTrain() {
 	if (dir)
 		timer = 70;
 	else
-		timer = -60;
+		timer = -70;
 }

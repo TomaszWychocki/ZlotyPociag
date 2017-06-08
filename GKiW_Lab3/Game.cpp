@@ -6,11 +6,15 @@ Game::Game() {
 	points = 0;
 	cash = 0;
 	this->terrain = new Model("models\\terrain.obj", "models\\textures\\terrain.bmp");
+	printLoading("12");
 	train = new Train(0, false, &particles, &startTrainHP);
 	this->collision = new Collision("models\\terr.txt", train);
+	printLoading("87");
 	this->cannon = new Cannon();
+	printLoading("97");
 	this->tutorial = new Tutorial(train);
 	this->skybox = new Skybox(60.0f);
+	printLoading("99");
 	se = irrklang::createIrrKlangDevice();
 	this->loadLevel(currentLevel);
 
@@ -68,8 +72,8 @@ void Game::calculateScene() {
 			bullets.erase(bullets.begin() + i);
 		}
 		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
-			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.5f) {
-			//particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
+			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.2f) {
+			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
 			se->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
@@ -365,6 +369,11 @@ void Game::renderHUD() {
 
 	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
 		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, (glutGet(GLUT_WINDOW_HEIGHT) / 2) + 100, 5, "Ladowanie pocisku...", 0, 0, 1);
+
+	if (currentLevel == 5 && keysTimer > 0) {
+		keysTimer--;
+		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 185, (glutGet(GLUT_WINDOW_HEIGHT) / 2) + 130, 5, "Omijaj pociski za pomoca klawiszy Q E", 0, 0, 1);
+	}
 
 	drawHUDelements(wf, bg, cannon->reloading / totalLoadingTime, train->HP/ startTrainHP);
 }

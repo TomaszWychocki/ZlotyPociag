@@ -17,11 +17,11 @@ Collision::Collision(char *fName, Train *t) {
 
 	train = t;
 	trainMin.x = 0;
-	trainMin.y = 0.6616f;
-	trainMin.z = -0.16847f;
+	trainMin.y = 0.44707;
+	trainMin.z = -0.1278f;
 	trainMax.x = 0;
-	trainMax.y = 0.07027f;
-	trainMax.z = 0.16847f;
+	trainMax.y = 0.04497;
+	trainMax.z = 0.1278f;
 }
 
 
@@ -54,62 +54,62 @@ bool Collision::isCollision(float x, float y, float z) {
 
 bool Collision::isCollisionWithTrain(float x, float y, float z) {
 	if (train->dir) {
-		trainMin.x = train->posX - 0.37282f + 1.49674f;
-		trainMax.x = train->posX + 5.78718f + 1.49674f;
+		trainMin.x = train->posX - 0.26097f;
+		trainMax.x = train->posX + 4.02643f;
 	}
 	else {
-		trainMax.x = train->posX + 0.37282f - 1.49674f;
-		trainMin.x = train->posX - 5.78718f - 1.49674f;
+		trainMax.x = train->posX + 0.26097f;
+		trainMin.x = train->posX - 4.02643f;
 	}
 
 	return (trainMin.x <= x && trainMax.x >= x) && (trainMin.y >= y && trainMax.y <= y) && (trainMin.z <= z && trainMax.z >= z);
 }
 
 void Collision::Render() {
-	//Teren
-	for (int w = 0; w <= wMax; w++) {
-		for (int k = 0; k <= kMax; k++) {
-			for (size_t i = 0; i < positions[w][k].size(); i++) {
-				glPushMatrix();
-					glTranslatef(positions[w][k][i].x, positions[w][k][i].y, positions[w][k][i].z);
-					glutSolidCube(0.1f);
-				glPopMatrix();
-			}
-		}
-	}
+	////Teren
+	//for (int w = 0; w <= wMax; w++) {
+	//	for (int k = 0; k <= kMax; k++) {
+	//		for (size_t i = 0; i < positions[w][k].size(); i++) {
+	//			glPushMatrix();
+	//				glTranslatef(positions[w][k][i].x, positions[w][k][i].y, positions[w][k][i].z);
+	//				glutSolidCube(0.05f);
+	//			glPopMatrix();
+	//		}
+	//	}
+	//}
 
-	////Pociag
-	//glPushMatrix();
-	//	glTranslatef(trainMin.x, trainMin.y, trainMax.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMin.x, trainMax.y, trainMax.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMin.x, trainMax.y, trainMin.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMin.x, trainMin.y, trainMin.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
+	//Pociag
+	glPushMatrix();
+		glTranslatef(trainMin.x, trainMin.y, trainMax.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMin.x, trainMax.y, trainMax.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMin.x, trainMax.y, trainMin.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMin.x, trainMin.y, trainMin.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
 
-	//glPushMatrix();
-	//	glTranslatef(trainMax.x, trainMin.y, trainMax.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMax.x, trainMax.y, trainMax.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMax.x, trainMax.y, trainMin.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(trainMax.x, trainMin.y, trainMin.z);
-	//	glutSolidCube(0.1f);
-	//glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMax.x, trainMin.y, trainMax.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMax.x, trainMax.y, trainMax.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMax.x, trainMax.y, trainMin.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
+	glPushMatrix();
+		glTranslatef(trainMax.x, trainMin.y, trainMin.z);
+		glutSolidCube(0.1f);
+	glPopMatrix();
 }

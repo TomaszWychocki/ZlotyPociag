@@ -82,3 +82,12 @@ void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 }
+
+void printLoading(std::string s) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wczytywanie - " + s + "%", 1, 1, 1);
+	glutSwapBuffers();
+	glFlush();
+	glutPostRedisplay();
+}

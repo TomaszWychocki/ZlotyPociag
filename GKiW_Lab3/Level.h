@@ -25,7 +25,7 @@ private:
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };
 	float startPosX[5] = { -2, 2, 3, 0, 2 };
 	float startPosZ[5] = { 7, 10, 12, 14, 16 };
-	float tSpeed[5] = { 0.4f, 0.6f, 0.8f, 1.0f, 1.5f };
+	float tSpeed[5] = { 0.4f, 0.6f, 0.8f, 1.0f, 1.2f };
 	float startTime;
 };
 

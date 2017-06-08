@@ -3,6 +3,7 @@
 #include <irrKlang.h>
 #include <vector>
 #include "Particle.h" 
+#include "FunctionsPack.h"
 
 class Train
 {

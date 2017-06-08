@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	glutMouseFunc(onMouseButton);
 	glutTimerFunc(17, OnTimer, 0);
 
-	//glutFullScreen();
+	glutFullScreen();
 	se = createIrrKlangDevice();
 	hs = new HighScores();
 	m_menu = new MainMenu();
@@ -311,12 +311,7 @@ void OnTimer(int id) {
 		}
 	}
 	else if (CurrentState == loading) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glLoadIdentity();
-		printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wczytywanie...", 1, 1, 1);
-		glutSwapBuffers();
-		glFlush();
-		glutPostRedisplay();
+		printLoading("0");
 		game = new Game();
 		glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 		CurrentState = play;
