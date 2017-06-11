@@ -61,18 +61,12 @@ void Train::Calculate() {
 			setRandomTrain();
 	}
 
-	if (currentTrain == 1) {
-		if (dir)
-			timer -= speed * 1.5f;
-		else
-			timer += speed * 1.5f;
-	}
-	else {
-		if (dir)
-			timer -= speed;
-		else
-			timer += speed;
-	}
+
+	if (dir)
+		timer -= speed;
+	else
+		timer += speed;
+
 	posX = (timer / 10);
 
 
@@ -170,6 +164,12 @@ void Train::setRandomTrain() {
 		HP = HPdelta + (rand() % 51);
 		*startHP = HP;
 	}
+
+	if (currentTrain == 1) {
+		HP = 10;
+		*startHP = HP;
+	}
+
 	isDead = false;
 	bulletReady = false;
 
