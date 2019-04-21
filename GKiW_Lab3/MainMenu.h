@@ -16,7 +16,7 @@ public:
 private:
 	typedef struct polygon
 	{
-		int xmin, xmax, ymin, ymax;
+		float xmin, xmax, ymin, ymax;
 	} polygon;
 
 	polygon polygons[3];
@@ -25,8 +25,8 @@ private:
 	GLuint startItem;
 	GLuint scoresItem;
 	GLuint exitItem;
-	ISoundEngine* se;
-	int width;
-	int height;
+	ISoundEngine* soundEngine;
+	float width;
+	float height;
 };
 

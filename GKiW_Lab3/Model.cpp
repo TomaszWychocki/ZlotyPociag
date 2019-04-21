@@ -1,19 +1,17 @@
 ﻿#include "stdafx.h"
 #include "Model.h"
-
-
+#include "Vector3.h"
 
 Model::Model(char * OBJfile, char * TEXfile) {
 	LoadObj(OBJfile);
 	textue = LoadTexture(TEXfile, GL_LINEAR, GL_LINEAR_MIPMAP_NEAREST);
 }
 
-
 Model::~Model()
 {
 }
 
-void Model::Render() {
+void Model::show() {
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	float m_amb[] = { 0.9f, 0.9f, 0.9f, 1.0f };
@@ -35,26 +33,26 @@ void Model::LoadObj(char * file) {
 		return;
 	}
 
-	std::vector<vec3> * v = new std::vector<vec3>();
-	std::vector<vec3> * n = new std::vector<vec3>();
-	std::vector<vec3> * t = new std::vector<vec3>();
+	std::vector<Vector3> * v = new std::vector<Vector3>();
+	std::vector<Vector3> * n = new std::vector<Vector3>();
+	std::vector<Vector3> * t = new std::vector<Vector3>();
 	std::vector<SFace> * f = new std::vector<SFace>();
 
 	char buf[128];
 
 	while (fgets(buf, 128, fp) != NULL) {
 		if (buf[0] == 'v' && buf[1] == ' ') {
-			vec3 * vertex = new vec3();
+			Vector3 * vertex = new Vector3();
 			sscanf(buf, "v %f %f %f", &vertex->x, &vertex->y, &vertex->z);
 			v->push_back(*vertex);
 		}
 		if (buf[0] == 'v' && buf[1] == 't') {
-			vec3 * vertex = new vec3();
+			Vector3 * vertex = new Vector3();
 			sscanf(buf, "vt %f %f", &vertex->x, &vertex->y);
 			t->push_back(*vertex);
 		}
 		if (buf[0] == 'v' && buf[1] == 'n') {
-			vec3 * vertex = new vec3();
+			Vector3 * vertex = new Vector3();
 			sscanf(buf, "vn %f %f %f", &vertex->x, &vertex->y, &vertex->z);
 			n->push_back(*vertex);
 		}
@@ -74,11 +72,11 @@ void Model::LoadObj(char * file) {
 	dlId = glGenLists(1);
 	glNewList(dlId, GL_COMPILE);
 	glBegin(GL_TRIANGLES);
-	for (int i = 0; i < f->size(); ++i) {
-		for (int j = 0; j < 3; ++j) {
-			vec3 * cv = &(*v)[((*f)[i].v[j] - 1)];
-			vec3 * ct = &(*t)[((*f)[i].t[j] - 1)];
-			vec3 * cn = &(*n)[((*f)[i].n[j] - 1)];
+	for (size_t i = 0; i < f->size(); ++i) {
+		for (size_t j = 0; j < 3; ++j) {
+			Vector3 * cv = &(*v)[((*f)[i].v[j] - 1)];
+			Vector3 * ct = &(*t)[((*f)[i].t[j] - 1)];
+			Vector3 * cn = &(*n)[((*f)[i].n[j] - 1)];
 			glTexCoord2f(ct->x, ct->y);
 			glNormal3f(cn->x, cn->y, cn->z);
 			glVertex3f(cv->x, cv->y, cv->z);

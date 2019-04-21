@@ -1,25 +1,25 @@
+#pragma once
 #include "Level.h"
 #include "Cannon.h"
 #include "Bullet.h"
 #include "Particle.h"
-#include <vector>
 #include "FunctionsPack.h"
 #include "Train.h"
 #include "Model.h"
-#include <irrKlang.h>
 #include "Tutorial.h"
 #include "Skybox.h"
 #include "Collision.h"
+#include "Vector3.h"
+#include "Point.h"
+#include <vector>
+#include <irrKlang.h>
 
 class Game
 {
-	struct vec3 {
-		float x, y, z;
-	};
-
-	struct SCameraState {
-		vec3 pos;
-		vec3 dir;
+	struct SCameraState
+	{
+		Point pos;
+		Vector3 dir;
 		float speed;
 		float velRY, velRX;
 		float velX;
@@ -45,7 +45,7 @@ public:
 	void renderTutorial();
 
 	SCameraState player;
-	vec3 LightPos;
+	Vector3 LightPos;
 	bool lightEnabled = true;
 	Level *level;
 	Cannon *cannon;
@@ -60,9 +60,10 @@ public:
 	float windOffset;
 	bool windChange;
 	float posOffset;
+	float deltaTime;
 
-	std::vector < Bullet* > bullets;
-	std::vector < Particle* > particles;
+	std::vector <Bullet*> bullets;
+	std::vector <Particle*> particles;
 
 private:
 	int timer;
@@ -72,7 +73,7 @@ private:
 	GLuint wf, bg;
 	Model *terrain;
 	Train *train;
-	irrklang::ISoundEngine* se;
+	irrklang::ISoundEngine* soundEngine;
 	Skybox *skybox;
 	Collision *collision;
 };

@@ -1,23 +1,23 @@
 #pragma once
+#include "Vector3.h"
+#include "Point.h"
+
+
 class Particle
 {
-	struct vec3 {
-		float x, y, z;
-	};
-
 public:
-	Particle(float, float, float);
+	Particle(const Point & point);
 	float randMToN(float, float);
 	~Particle();
 	void calculate();
-	void Render();
+	void show();
 	bool end = false;
 
 private: 
 	float Offset = 0;
-	vec3 startPos;
-	vec3 par[100];
-	vec3 color[100];
-	vec3 angle;
+	Point startPos;
+	Vector3 par[100];
+	Vector3 color[100];
+	Vector3 angle;
 };
 

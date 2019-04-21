@@ -1,39 +1,24 @@
 #pragma once
+#include "Train.h"
+#include "Point.h"
 #include <vector>
 #include <iostream>
-#include "Train.h"
 
 class Collision
 {
-	struct vec3 {
-		float x, y, z;
-
-		vec3(float nx, float ny, float nz) {
-			x = nx;
-			y = ny;
-			z = nz;
-		}
-
-		vec3() {
-			x = 0;
-			y = 0;
-			z = 0;
-		}
-	};
-
 public:
-	Collision(char *, Train *t);
+	Collision(char *, Train *train);
 	~Collision();
-	bool isCollision(float x, float y, float z);
-	bool isCollisionWithTrain(float x, float y, float z);
-	void Render();
+	bool isCollision(const Point & point);
+	bool isCollisionWithTrain(const Point & point);
+	void show();
 
 private:
-	std::vector<vec3> positions[9][29];
-	int wMax = 8, kMax = 28;
+	std::vector<Point> positions[9][29];
+	size_t wMax = 8, kMax = 28;
 	Train * train;
 
-	vec3 trainMin;
-	vec3 trainMax;
+	Point trainMin;
+	Point trainMax;
 };
 

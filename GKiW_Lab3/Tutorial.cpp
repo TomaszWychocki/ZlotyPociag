@@ -14,10 +14,10 @@ Tutorial::~Tutorial()
 {
 }
 
-void Tutorial::Render(){
+void Tutorial::show(){
 	if (frame == 1) {
-		this->player.pos.x = 3 * cos((timer*0.7f)*3.1415/180);
-		this->player.pos.z = 3 * sin((timer*0.7f)*3.1415 / 180);
+		this->player.pos.x = 3 * cosf((timer*0.7f)*3.1415f / 180.0f);
+		this->player.pos.z = 3 * sinf((timer*0.7f)*3.1415f / 180.0f);
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Witaj w grze Zloty Pociag! Przed Toba 5 poziomow! Poznasz teraz zasady gry.", 1, 1, 1);
 		train->showTrainByNumber(0);
@@ -59,9 +59,9 @@ void Tutorial::Render(){
 		train->showTrainByNumber(3);
 	}
 	else if (frame == 6) {
-		this->player.pos.x = 3 * cos((timer*0.7f)*3.1415 / 180);
+		this->player.pos.x = 3 * cosf((timer*0.7f)*3.1415f / 180.0f);
 		this->player.pos.y = 1.0f;
-		this->player.pos.z = 3 * sin((timer*0.7f)*3.1415 / 180);
+		this->player.pos.z = 3 * sinf((timer*0.7f)*3.1415f / 180.0f);
 		gluLookAt(this->player.pos.x, this->player.pos.y, this->player.pos.z, 0, 0, 0, 0.0f, 1.0f, 0.0f);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f), 3, "Zdobywaj punkty i przechodz do nastepnych poziomow!", 1, 1, 1);
 		printText(20, (glutGet(GLUT_WINDOW_HEIGHT) * 0.75f)+20, 3, "Za zebrane pieniadze ulepszaj swoje dzialo! Powodzenia!", 1, 1, 1);

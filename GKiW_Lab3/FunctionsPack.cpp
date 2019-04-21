@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include <string>
 
-void printText(float x, float y, int spacing, std::string str, float r, float g, float b) {
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+void printText(float x, float y, int spacing, std::string str, float r, float g, float b)
+{
+	float width = float(glutGet(GLUT_WINDOW_WIDTH));
+	float height = float(glutGet(GLUT_WINDOW_HEIGHT));
 	glMatrixMode(GL_PROJECTION);
 	glColor3f(r, g, b);
 	glDisable(GL_LIGHTING);
@@ -12,14 +13,15 @@ void printText(float x, float y, int spacing, std::string str, float r, float g,
 		glLoadIdentity();
 		gluOrtho2D(0, width, 0, height);
 		glScalef(1, -1, 1);
-		glTranslatef(0, -height, 0);
+		glTranslatef(0.0f, -height, 0.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 			glLoadIdentity();
 
-			int x1 = x;
+			float x1 = x;
 
-			for (std::string::iterator i = str.begin(); i != str.end(); ++i) {
+			for (std::string::iterator i = str.begin(); i != str.end(); ++i)
+			{
 				char c = *i;
 				glRasterPos2f(x1, y);
 				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
@@ -33,9 +35,10 @@ void printText(float x, float y, int spacing, std::string str, float r, float g,
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp)
+{
+	float width = float(glutGet(GLUT_WINDOW_WIDTH));
+	float height = float(glutGet(GLUT_WINDOW_HEIGHT));
 	glMatrixMode(GL_PROJECTION);
 	glColor3f(1, 1, 1);
 	glDisable(GL_LIGHTING);
@@ -43,7 +46,7 @@ void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
 	glLoadIdentity();
 	gluOrtho2D(0, width, 0, height);
 	glScalef(1, -1, 1);
-	glTranslatef(0, -height, 0);
+	glTranslatef(0.0f, -height, 0.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
@@ -51,23 +54,24 @@ void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
 	glCallList(wf);
 
 	//Ladowanie pocisku
-	if (loading > 0) {
+	if (loading > 0)
+	{
 		glColor3f(1, 1.0f - loading, 0);
 		glBegin(GL_QUADS);
-			glVertex2f((width / 2) - 30, (height / 2) - 40 + (1 - loading) * 60);
-			glVertex2f((width / 2) - 35, (height / 2) - 40 + (1 - loading) * 60);
-			glVertex2f((width / 2) - 35, (height / 2) + 20);
-			glVertex2f((width / 2) - 30, (height / 2) + 20);
+			glVertex2f((width / 2.0f) - 30.0f, (height / 2.0f) - 40.0f + (1.0f - loading) * 60.0f);
+			glVertex2f((width / 2.0f) - 35.0f, (height / 2.0f) - 40.0f + (1.0f - loading) * 60.0f);
+			glVertex2f((width / 2.0f) - 35.0f, (height / 2.0f) + 20.0f);
+			glVertex2f((width / 2.0f) - 30.0f, (height / 2.0f) + 20.0f);
 		glEnd();
 	}
 
 	//Hp pociagu
 	glColor3f(1 - Hp, 0.75f * Hp, 0);
 	glBegin(GL_QUADS);
-		glVertex2f((width / 2) + 30, (height / 2) - 40 + (1 - Hp) * 60);
-		glVertex2f((width / 2) + 35, (height / 2) - 40 + (1 - Hp) * 60);
-		glVertex2f((width / 2) + 35, (height / 2) + 20);
-		glVertex2f((width / 2) + 30, (height / 2) + 20);
+		glVertex2f((width / 2.0f) + 30.0f, (height / 2.0f) - 40.0f + (1.0f - Hp) * 60.0f);
+		glVertex2f((width / 2.0f) + 35.0f, (height / 2.0f) - 40.0f + (1.0f - Hp) * 60.0f);
+		glVertex2f((width / 2.0f) + 35.0f, (height / 2.0f) + 20.0f);
+		glVertex2f((width / 2.0f) + 30.0f, (height / 2.0f) + 20.0f);
 	glEnd();
 
 	glEnable(GL_BLEND);
@@ -83,10 +87,11 @@ void drawHUDelements(GLuint wf, GLuint bg, float loading, float Hp) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void printLoading(std::string s) {
+void printLoading(std::string s)
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	printText(20, glutGet(GLUT_WINDOW_HEIGHT) / 2, 10, "Wczytywanie - " + s + "%", 1, 1, 1);
+	printText(20.0f, glutGet(GLUT_WINDOW_HEIGHT) / 2.0f, 10, "Wczytywanie - " + s + "%", 1, 1, 1);
 	glutSwapBuffers();
 	glFlush();
 	glutPostRedisplay();

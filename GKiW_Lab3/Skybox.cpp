@@ -25,7 +25,7 @@ Skybox::~Skybox()
 {
 }
 
-void Skybox::Render(){
+void Skybox::show(){
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);

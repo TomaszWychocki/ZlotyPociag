@@ -2,7 +2,8 @@
 #include "Level.h"
 
 
-Level::Level(int n) {
+Level::Level(int n)
+{
 	levelNumber = n;
 	requiredPoints = maxPoints[levelNumber - 1];
 	wind = windValues[levelNumber - 1];
@@ -11,15 +12,18 @@ Level::Level(int n) {
 	sZ = startPosZ[levelNumber - 1];
 	trainSpeed = tSpeed[levelNumber - 1];
 	trainPoint = trainPoints[levelNumber - 1];
-	startTime = glutGet(GLUT_ELAPSED_TIME)/1000;
+	startTime = float(glutGet(GLUT_ELAPSED_TIME) / 1000.0f);
 	curentPoints = 0;
 	curentCash = 0;
 }
 
-
-Level::~Level() {
+Level::~Level()
+{
 }
 
-int Level::getRemainingTime() {
-	return maxTime - ((glutGet(GLUT_ELAPSED_TIME) / 1000) - startTime);
+int Level::getRemainingTime()
+{
+	return int(maxTime - ((glutGet(GLUT_ELAPSED_TIME) / 1000) - startTime));
 }
+
+

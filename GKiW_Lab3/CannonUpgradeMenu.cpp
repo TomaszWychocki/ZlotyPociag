@@ -4,38 +4,39 @@
 #include "FunctionsPack.h"
 #include <string.h>
 
-CannonUpgradeMenu::CannonUpgradeMenu(Game *g) {
+CannonUpgradeMenu::CannonUpgradeMenu(Game *g)
+{
 	this->gam = g;
-	width = glutGet(GLUT_WINDOW_WIDTH);
-	height = glutGet(GLUT_WINDOW_HEIGHT);
+	width = float(glutGet(GLUT_WINDOW_WIDTH));
+	height = float(glutGet(GLUT_WINDOW_HEIGHT));
 
-	polygons[0].xmin = (width / 2) + 126;
-	polygons[0].xmax = (width / 2) + 163;
-	polygons[0].ymin = 292;
-	polygons[0].ymax = 329;
+	polygons[0].xmin = (width / 2.0f) + 126.0f;
+	polygons[0].xmax = (width / 2.0f) + 163.0f;
+	polygons[0].ymin = 292.0f;
+	polygons[0].ymax = 329.0f;
 
-	polygons[1].xmin = (width / 2) + 126;
-	polygons[1].xmax = (width / 2) + 163;
-	polygons[1].ymin = 347;
-	polygons[1].ymax = 384;
+	polygons[1].xmin = (width / 2.0f) + 126.0f;
+	polygons[1].xmax = (width / 2.0f) + 163.0f;
+	polygons[1].ymin = 347.0f;
+	polygons[1].ymax = 384.0f;
 
-	polygons[2].xmin = (width / 2) + 126;
-	polygons[2].xmax = (width / 2) + 163;
-	polygons[2].ymin = 402;
-	polygons[2].ymax = 439;
+	polygons[2].xmin = (width / 2.0f) + 126.0f;
+	polygons[2].xmax = (width / 2.0f) + 163.0f;
+	polygons[2].ymin = 402.0f;
+	polygons[2].ymax = 439.0f;
 
-	polygons[3].xmin = 35; //wyjscie
-	polygons[3].xmax = 293;
-	polygons[3].ymin = height - (35 + 64);
-	polygons[3].ymax = height - 35;
+	polygons[3].xmin = 35.0f; //wyjscie
+	polygons[3].xmax = 293.0f;
+	polygons[3].ymin = height - (35.0f + 64.0f);
+	polygons[3].ymax = height - 35.0f;
 
-	polygons[4].xmin = width - (35 + 258); //graj dalej
-	polygons[4].xmax = width - 35;
-	polygons[4].ymin = height - (35 + 64);
-	polygons[4].ymax = height - 35;
+	polygons[4].xmin = width - (35.0f + 258.0f); //graj dalej
+	polygons[4].xmax = width - 35.0f;
+	polygons[4].ymin = height - (35.0f + 64.0f);
+	polygons[4].ymax = height - 35.0f;
 
-	se = createIrrKlangDevice();
-	se->play2D("sounds/main.wav", true);
+	soundEngine = createIrrKlangDevice();
+	soundEngine->play2D("sounds/main.wav", true);
 	glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
 
 	ilInit();
@@ -49,14 +50,16 @@ CannonUpgradeMenu::CannonUpgradeMenu(Game *g) {
 }
 
 
-CannonUpgradeMenu::~CannonUpgradeMenu() {
-	se->drop();
+CannonUpgradeMenu::~CannonUpgradeMenu()
+{
+	soundEngine->drop();
 }
 
-void CannonUpgradeMenu::show() {
+void CannonUpgradeMenu::show()
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	float width = float(glutGet(GLUT_WINDOW_WIDTH));
+	float height = float((GLUT_WINDOW_HEIGHT));
 	glMatrixMode(GL_PROJECTION);
 	glColor3f(1, 1, 1);
 	glDisable(GL_LIGHTING);
@@ -64,7 +67,7 @@ void CannonUpgradeMenu::show() {
 		glLoadIdentity();
 		gluOrtho2D(0, width, 0, height);
 		glScalef(1, -1, 1);
-		glTranslatef(0, -height, 0);
+		glTranslatef(0.0f, -height, 0.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 			glLoadIdentity();
@@ -79,7 +82,8 @@ void CannonUpgradeMenu::show() {
 			glEnd();
 
 			glBindTexture(GL_TEXTURE_2D, arrow);
-			for (int i = 0; i<=2; i++) {
+			for (int i = 0; i<=2; i++)
+			{
 				glBegin(GL_QUADS);
 					glTexCoord2f(0.0f, 0.0f);  glVertex2f(polygons[i].xmin, polygons[i].ymax);
 					glTexCoord2f(0.0f, 1.0f);  glVertex2f(polygons[i].xmin, polygons[i].ymin);
@@ -111,33 +115,36 @@ void CannonUpgradeMenu::show() {
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 
-	printText((width/2) - 250, 317, 6, "Szybkostrzelnosc: lvl " + std::to_string(gam->cannon->fireRateLevel), 1, 1, 0);
+	printText((width / 2.0f) - 250.0f, 317.0f, 6, "Szybkostrzelnosc: lvl " + std::to_string(gam->cannon->fireRateLevel), 1, 1, 0);
 	if(gam->cannon->fireRateLevel < 5)
-		printText((width / 2) + 170, 317, 6, "$" + std::to_string(gam->cannon->fireRatePrices[gam->cannon->fireRateLevel-1]), 1, 1, 0);
+		printText((width / 2.0f) + 170.0f, 317.0f, 6, "$" + std::to_string(gam->cannon->fireRatePrices[gam->cannon->fireRateLevel-1]), 1, 1, 0);
 	else
-		printText((width / 2) + 170, 317, 6, "MAX", 1, 1, 0);
+		printText((width / 2.0f) + 170.0f, 317.0f, 6, "MAX", 1, 1, 0);
 
-	printText((width / 2) - 250, 372, 6, "Moc pocisku: lvl " + std::to_string(gam->cannon->ballPowerLevel), 1, 1, 0);
+	printText((width / 2.0f) - 250.0f, 372.0f, 6, "Moc pocisku: lvl " + std::to_string(gam->cannon->ballPowerLevel), 1, 1, 0);
 	if (gam->cannon->ballPowerLevel < 5)
-		printText((width / 2) + 170, 372, 6, "$" + std::to_string(gam->cannon->ballPowerPrices[gam->cannon->ballPowerLevel - 1]), 1, 1, 0);
+		printText((width / 2.0f) + 170.0f, 372.0f, 6, "$" + std::to_string(gam->cannon->ballPowerPrices[gam->cannon->ballPowerLevel - 1]), 1, 1, 0);
 	else
-		printText((width / 2) + 170, 372, 6, "MAX", 1, 1, 0);
+		printText((width / 2.0f) + 17.0f, 372.0f, 6, "MAX", 1, 1, 0);
 
-	printText((width / 2) - 250, 427, 6, "Predkosc pocisku: lvl " + std::to_string(gam->cannon->ballSpeedLevel), 1, 1, 0);
+	printText((width / 2.0f) - 250.0f, 427.0f, 6, "Predkosc pocisku: lvl " + std::to_string(gam->cannon->ballSpeedLevel), 1, 1, 0);
 	if (gam->cannon->ballSpeedLevel < 5)
-		printText((width / 2) + 170, 427, 6, "$" + std::to_string(gam->cannon->ballSpeedPrices[gam->cannon->ballSpeedLevel - 1]), 1, 1, 0);
+		printText((width / 2.0f) + 170.0f, 427.0f, 6, "$" + std::to_string(gam->cannon->ballSpeedPrices[gam->cannon->ballSpeedLevel - 1]), 1, 1, 0);
 	else
-		printText((width / 2) + 170, 427, 6, "MAX", 1, 1, 0);
+		printText((width / 2.0f) + 170.0f, 427.0f, 6, "MAX", 1, 1, 0);
 
-	printText(100, 40, 6, "Poziom: " + std::to_string(gam->currentLevel), 1, 1, 0);
-	printText(100, 60, 6, "Punkty: " + std::to_string(gam->points), 1, 1, 0);
-	printText(100, 80, 6, "Pieniadze: $" + std::to_string(gam->cash), 1, 1, 0);
-	printText(100, 120, 6, gam->message, 1, 0, 0);
+	printText(100.0f, 40.0f, 6, "Poziom: " + std::to_string(gam->currentLevel), 1, 1, 0);
+	printText(100.0f, 60.0f, 6, "Punkty: " + std::to_string(gam->points), 1, 1, 0);
+	printText(100.0f, 80.0f, 6, "Pieniadze: $" + std::to_string(gam->cash), 1, 1, 0);
+	printText(100.0f, 120.0f, 6, gam->message, 1, 0, 0);
 }
 
-int CannonUpgradeMenu::checkItems(int x, int y) {
-	for (int i = 0; i<5; i++) {
-		if ((y >= polygons[i].ymin) && (y<polygons[i].ymax) && (x >= polygons[i].xmin) && (x <= polygons[i].xmax)) {
+int CannonUpgradeMenu::checkItems(int x, int y)
+{
+	for (int i = 0; i<5; i++)
+	{
+		if ((y >= polygons[i].ymin) && (y<polygons[i].ymax) && (x >= polygons[i].xmin) && (x <= polygons[i].xmax))
+		{
 			return i;
 			break;
 		}

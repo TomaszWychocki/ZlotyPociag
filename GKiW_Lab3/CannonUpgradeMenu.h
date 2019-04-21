@@ -14,10 +14,10 @@ public:
 	int checkItems(int, int);
 
 private:
-	typedef struct polygon
+	struct polygon
 	{
-		int xmin, xmax, ymin, ymax;
-	} polygon;
+		float xmin, xmax, ymin, ymax;
+	};
 
 	polygon polygons[5];
 	Game *gam;
@@ -27,8 +27,8 @@ private:
 	GLuint exitItem;
 	GLuint playItem;
 	GLuint arrow;
-	ISoundEngine* se;
-	int height;
-	int width;
+	ISoundEngine* soundEngine;
+	float height;
+	float width;
 };
 

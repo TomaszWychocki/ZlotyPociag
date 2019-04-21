@@ -9,7 +9,7 @@ class Skybox
 public:
 	Skybox(float);
 	~Skybox();
-	void Render();
+	void show();
 
 private:
 	GLuint front, back;

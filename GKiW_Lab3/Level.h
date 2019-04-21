@@ -20,7 +20,6 @@ public:
 private:
 	int maxTimes[5] = { 70,60,50,50,0 };
 	int maxPoints[5] = { 100,150,180,220,1000 };
-	//int maxPoints[5] = { 1,2,3,4,5 };
 	int trainPoints[5] = { 24, 36, 40, 44, 2000 };
 	float windValues[5] = { 0,0.001f,0.002f,0.003f,0.004f };
 	float startPosX[5] = { -2, 2, 3, 0, 2 };

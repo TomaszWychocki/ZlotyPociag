@@ -1,16 +1,17 @@
 #pragma once
 #include "Model.h"
 
+
 class Cannon
 {
 public:
 	Cannon();
 	~Cannon();
-	void Render();
+	void show();
 	Model *model;
 	int fireRate = 6;
 	int ballPower = 20;
-	int ballSpeed = 2;
+	float ballSpeedFactor = 0.2f;
 
 	//Timer
 	int reloading = 0;

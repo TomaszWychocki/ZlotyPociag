@@ -16,7 +16,7 @@ class Tutorial
 public:
 	Tutorial(Train *t);
 	~Tutorial();
-	void Render();
+	void show();
 	bool end = false;
 
 private:

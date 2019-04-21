@@ -1,31 +1,33 @@
 #pragma once
+#include "Vector3.h"
+#include "Point.h"
+
+
+enum bulletOwner
+{
+	TRAIN,
+	PLAYER
+};
+
 class Bullet
 {
 public:
-	Bullet(float, float, float, float, float, float, float, float, float);
+	bulletOwner owner;
+
+	Bullet(const Point & pos, const Vector3 & dir, const Vector3 & wind, float speed, bulletOwner owner);
 	~Bullet();
-	struct vec3 {
-		float x, y, z;
-	};
 
-	struct BulletState {
-		vec3 pos;
-		vec3 dir;
-		float speed;
-		float angle;
-		float wind;
-	};
-
-	BulletState state;
-	void Render();
-	void move();
-	static float getDistance(float ax, float ay, float az, float bx, float by, float bz) {
-		return sqrt(pow(bx - ax, 2) + pow(by - ay, 2) + pow(bz - az, 2));
-	}
+	void show();
+	void update();
+	Point & getPosition();
 
 private:
-	float getYParameter();
-	vec3 startPosition;
-	float t = 0;
+	float speed;
+	float mass;
+	Vector3 wind;
+	Vector3 gravity;
+	Vector3 velocity;
+	Vector3 acceleration;
+	Point position;
 };
 

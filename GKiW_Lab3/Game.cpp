@@ -2,9 +2,12 @@
 #include "Game.h"
 #include <iostream>
 
-Game::Game() {
+
+Game::Game()
+{
 	points = 0;
 	cash = 0;
+	deltaTime = 0.0f;
 	this->terrain = new Model("models\\terrain.obj", "models\\textures\\terrain.bmp");
 	printLoading("12");
 	train = new Train(0, false, &particles, &startTrainHP);
@@ -15,11 +18,11 @@ Game::Game() {
 	this->tutorial = new Tutorial(train);
 	this->skybox = new Skybox(60.0f);
 	printLoading("99");
-	se = irrklang::createIrrKlangDevice();
+	soundEngine = irrklang::createIrrKlangDevice();
 	this->loadLevel(currentLevel);
 
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	float width = float(glutGet(GLUT_WINDOW_WIDTH));
+	float height = float(glutGet(GLUT_WINDOW_HEIGHT));
 	wf = glGenLists(1);
 	glNewList(wf, GL_COMPILE);
 		glBegin(GL_LINES);
@@ -44,88 +47,116 @@ Game::Game() {
 	glEndList();
 }
 
-Game::~Game() {
-
+Game::~Game()
+{
 }
 
-void Game::calculateScene() {
+void Game::calculateScene()
+{
 	train->playerPosX = player.pos.x;
 	train->Calculate();
 
 	//Kule
-	for (size_t i = 0; i < bullets.size(); i++) {
-		bool col = collision->isCollision(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z);
-		bool colT = collision->isCollisionWithTrain(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z);
+	for (size_t i = 0; i < bullets.size(); i++)
+	{
+		bool col = collision->isCollision(bullets[i]->getPosition());
+		bool collisionWithTrain = collision->isCollisionWithTrain(bullets[i]->getPosition());
 
-		if (colT && bullets[i]->state.angle < 900.0f) { //KOLIZJA Z POCIAGIEM
-			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			se->play2D("sounds/explosion.wav");
+		if (collisionWithTrain) // KOLIZJA Z POCIAGIEM
+		{
+			particles.push_back(new Particle(bullets[i]->getPosition()));
+			soundEngine->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 			train->HP -= ((cannon->ballPower * cannon->ballPowerLevel * 1.5f) + rand() % 20);
 			if (train->HP < 0) train->HP = 0;
 		}
-		else if (bullets[i]->state.pos.y < -2.0f || col) { //kolizja z terenem  
-			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			se->play2D("sounds/explosion.wav");
+		else if (bullets[i]->getPosition().y < -2.0f) // KOLIZJA Z TERENEM
+		{
+			particles.push_back(new Particle(bullets[i]->getPosition()));
+			soundEngine->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 		}
-		else if (bullets[i]->state.angle > 900.0f && Bullet::getDistance(player.pos.x, player.pos.y, player.pos.z, 
-			bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z) <= 0.2f) {
-			particles.push_back(new Particle(bullets[i]->state.pos.x, bullets[i]->state.pos.y, bullets[i]->state.pos.z));
-			se->play2D("sounds/explosion.wav");
+		else if (player.pos.distanceTo(bullets[i]->getPosition()) <= 0.2f && bullets[i]->owner == TRAIN) // KOLIZJA Z GRACZEM
+		{
+			particles.push_back(new Particle(bullets[i]->getPosition()));
+			soundEngine->play2D("sounds/explosion.wav");
 			delete bullets[i];
 			bullets.erase(bullets.begin() + i);
 			minusHP();
 			if (hp < 0) hp = 0;
 		}
 		else
-			bullets[i]->move();
+		{
+			bullets[i]->update();
+		}
 	}
 
-	if (train->bulletReady) {
-		se->play2D("sounds/cannon.wav");
-		bullets.push_back(new Bullet(train->startPos.x, train->startPos.y, train->startPos.z,
-			train->shootDir.x, train->shootDir.y, train->shootDir.z, 7.0f, 999.0f, 0.0f));
+	if (train->bulletReady)
+	{
+		soundEngine->play2D("sounds/cannon.wav");
+		bullets.push_back(
+			new Bullet(
+				train->startPos,
+				train->shootDir,
+				Vector3(),
+				0.5f,
+				TRAIN
+			)
+		);
+
 		train->bulletReady = false;
 	}
 
 	//Particles
-	for (size_t i = 0; i < particles.size(); i++) {
-		if (particles[i]->end) {
+	for (size_t i = 0; i < particles.size(); i++)
+	{
+		if (particles[i]->end)
+		{
 			delete particles[i];
 			particles.erase(particles.begin() + i);
 		}
 		else
+		{
 			particles[i]->calculate();
+		}
 	}
 
 	//Pociag
-	if (train->number != -1) {
-		if (train->number == 0) {
+	if (train->number != -1)
+	{
+		if (train->number == 0)
+		{
 			level->curentPoints += level->trainPoint;
 			level->curentCash += 50;
 		}
-		else if (train->number == 1) {
-			level->curentPoints -= level->trainPoint * 0.5;
+		else if (train->number == 1)
+		{
+			level->curentPoints -= int(level->trainPoint * 0.5f);
 			level->curentCash -= 100;
 		}
-		else if (train->number == 2) {
+		else if (train->number == 2)
+		{
 			level->curentPoints += level->trainPoint;
 			level->curentCash += 150;
 		}
-		else if (train->number == 3) {
+		else if (train->number == 3)
+		{
 			level->curentPoints += level->trainPoint;
 		}
+
 		train->number = -1;
 	}
 
-	if (this->cannon->reloading < 0) 
+	if (this->cannon->reloading < 0)
+	{
 		timer = 0;
+	}
 }
 
-void Game::cannnonUpgradeClicked(int opt) {
+void Game::cannnonUpgradeClicked(int opt)
+{
 	message = "";
 	switch (opt)
 	{
@@ -184,7 +215,7 @@ void Game::cannnonUpgradeClicked(int opt) {
 bool Game::checkTime(){
 	if (currentLevel > 0) {
 		if (currentLevel == 5 && level->curentPoints > 0) {
-			se->stopAllSounds();
+			soundEngine->stopAllSounds();
 			return true;
 		}
 
@@ -192,7 +223,7 @@ bool Game::checkTime(){
 			return false;
 
 		if (level->getRemainingTime() < 0) {
-			se->stopAllSounds();
+			soundEngine->stopAllSounds();
 			return true;
 		}
 		else
@@ -200,7 +231,7 @@ bool Game::checkTime(){
 	}
 	else if (tutorial->end == true) {
 		delete tutorial;
-		se->stopAllSounds();
+		soundEngine->stopAllSounds();
 		return true;
 	}
 	else
@@ -269,7 +300,7 @@ void Game::loadLevel(int l) {
 		windOffset = 0.0f;
 		windChange = true;
 		posOffset = 0.0f;
-		totalLoadingTime = (cannon->fireRate - cannon->fireRateLevel) * 25;
+		totalLoadingTime = (cannon->fireRate - cannon->fireRateLevel) * 25.0f;
 	}
 	train->playerPosX = player.pos.x;
 	train->playerPosZ = player.pos.z;
@@ -286,7 +317,7 @@ void Game::loadLevel(int l) {
 
 	this->timer = 0;
 	cannon->reloading = 0;
-	se->play2D("sounds/gameMusic.wav", true);
+	soundEngine->play2D("sounds/gameMusic.wav", true);
 }
 
 void Game::cleanMem(){
@@ -304,13 +335,13 @@ void Game::minusHP(){
 }
 
 void Game::renderTerrain() {
-	terrain->Render();
+	terrain->show();
 	//collision->Render();
 }
 
 void Game::renderSkybox() {
 	if (currentLevel > 0) glDisable(GL_FOG);
-	skybox->Render();
+	skybox->show();
 	if(currentLevel > 0) glEnable(GL_FOG);
 }
 
@@ -319,20 +350,20 @@ void Game::renderCannon() {
 		glTranslatef(player.pos.x, player.pos.y, player.pos.z);
 		glRotatef(hAngle - 90, 0, 1, 0);
 		glRotatef(vAngle, 0, 0, 1);
-		cannon->Render();
+		cannon->show();
 	glPopMatrix();
 }
 
 void Game::renderTrain() {
 	glPushMatrix();
-		train->Render();
+		train->show();
 	glPopMatrix();
 }
 
 void Game::renderBullets() {
 	for (size_t i = 0; i < bullets.size(); i++) {
 		glPushMatrix();
-			bullets[i]->Render();
+			bullets[i]->show();
 		glPopMatrix();
 	}
 }
@@ -340,7 +371,7 @@ void Game::renderBullets() {
 void Game::renderParticles() {
 	for (size_t i = 0; i < particles.size(); i++) {
 		glPushMatrix();
-		particles[i]->Render();
+		particles[i]->show();
 		glPopMatrix();
 	}
 }
@@ -368,16 +399,16 @@ void Game::renderHUD() {
 	}
 
 	if (this->cannon->reloading > 0 && timer++ % 30 < 15)
-		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 100, (glutGet(GLUT_WINDOW_HEIGHT) / 2) + 100, 5, "Ladowanie pocisku...", 0, 0, 1);
+		printText((glutGet(GLUT_WINDOW_WIDTH) / 2.0f) - 100.0f, (glutGet(GLUT_WINDOW_HEIGHT) / 2.0f) + 100.0f, 5, "Ladowanie pocisku...", 0, 0, 1);
 
 	if (currentLevel == 5 && keysTimer > 0) {
 		keysTimer--;
-		printText((glutGet(GLUT_WINDOW_WIDTH) / 2) - 185, (glutGet(GLUT_WINDOW_HEIGHT) / 2) + 130, 5, "Omijaj pociski za pomoca klawiszy Q E", 0, 0, 1);
+		printText((glutGet(GLUT_WINDOW_WIDTH) / 2.0f) - 185.0f, (glutGet(GLUT_WINDOW_HEIGHT) / 2.0f) + 130.0f, 5, "Omijaj pociski za pomoca klawiszy Q E", 0, 0, 1);
 	}
 
 	drawHUDelements(wf, bg, cannon->reloading / totalLoadingTime, train->HP/ startTrainHP);
 }
 
 void Game::renderTutorial() {
-	tutorial->Render();
+	tutorial->show();
 }

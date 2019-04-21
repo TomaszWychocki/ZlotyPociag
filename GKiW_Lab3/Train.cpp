@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Train.h"
+#include "Vector3.h"
+#include "Point.h"
 #include <iostream>
 
 
@@ -7,9 +9,10 @@ Train::Train(float s, bool isBoss, std::vector<Particle*> *v, float *h) {
 	this->speed = s;
 	this->isBoss = isBoss;
 	isDead = false;
+	number = -1;
 	startHP = h;
 	particleVector = v;
-	se = irrklang::createIrrKlangDevice();
+	soundEngine = irrklang::createIrrKlangDevice();
 	LoadModels();
 	setRandomTrain();
 }
@@ -22,9 +25,9 @@ Train::~Train() {
 void Train::LoadModels() {
 	trains[0] = new Model("models\\Train.obj", "models\\textures\\Train.bmp");
 	printLoading("25");
-	trains[1]= new Model("models\\Train_blue.obj", "models\\textures\\Train_blue.bmp");
+	trains[1]= new Model("models\\Train.obj", "models\\textures\\Train_blue.bmp");
 	printLoading("37");
-	trains[2] = new Model("models\\Train_green.obj", "models\\textures\\Train_green.bmp");
+	trains[2] = new Model("models\\Train.obj", "models\\textures\\Train_green.bmp");
 	printLoading("50");
 	trains[3] = new Model("models\\Train_gold.obj", "models\\textures\\Train_gold.bmp");
 	printLoading("62");
@@ -32,16 +35,24 @@ void Train::LoadModels() {
 	printLoading("75");
 }
 
-void Train::Calculate() {
-	if (HP <= 0 && !isDead) {
-		se->play2D("sounds/locomotive.wav");
-		for (int i = 0; i <= 8; i++) {
-			se->play2D("sounds/explosion.wav");
-			if (dir)
-				particleVector->push_back(new Particle((posX - 0.26097f) + (float)i / 2, 0.3f, 0.0f));
-			else
-				particleVector->push_back(new Particle((posX + 0.26097f) - (float)i / 2, 0.3f, 0.0f));
+void Train::Calculate()
+{
+	if (HP <= 0 && !isDead)
+	{
+		soundEngine->play2D("sounds/locomotive.wav");
+
+		for (int i = 0; i <= 8; i++)
+		{
+			soundEngine->play2D("sounds/explosion.wav");
+
+			Point explosionPos = 
+				dir ? 
+				Point((posX - 0.26097f) + (float)i / 2, 0.3f, 0.0f) : 
+				Point((posX + 0.26097f) + (float)i / 2, 0.3f, 0.0f);
+
+			this->particleVector->push_back(new Particle(explosionPos));
 		}
+
 		number = currentTrain;
 		isDead = true;
 	}
@@ -75,7 +86,7 @@ void Train::Calculate() {
 				a = atan2f(playerPosX - (posX + 1.16582f), playerPosZ);
 			else
 				a = atan2f(playerPosX - (posX - 1.16582f), playerPosZ);
-			a = a * 180 / 3.1415;
+			a = a * 180.0f / 3.1415f;
 
 			if (abs(timer - 20) <= 0.5f || abs(timer - 0) <= 0.5f) {
 				if (dir) {
@@ -100,7 +111,7 @@ void Train::Calculate() {
 	}
 }
 
-void Train::Render() {
+void Train::show() {
 	glTranslatef(posX, posY, 0.0f);
 	if (isBoss) {
 		glPushMatrix();
@@ -109,13 +120,13 @@ void Train::Render() {
 			else
 				glTranslatef(-1.16582f, 0.25899f, 0.0f);
 			glRotatef(a, 0, 1, 0);
-			trainCannon->Render();
+			trainCannon->show();
 		glPopMatrix();
 	}
 
 	if (!dir)
 		glRotatef(180.0f, 0, 1, 0);
-	trains[currentTrain]->Render();
+	trains[currentTrain]->show();
 }
 
 void Train::setDefault(int hpd) {
@@ -136,10 +147,10 @@ void Train::showTrainByNumber(int n) {
 			glPushMatrix();
 				glTranslatef(1.16582f, 0.25899f, 0.0f);
 				glRotatef(sin(timer/70)*60.0f, 0, 1, 0);
-				trainCannon->Render();
+				trainCannon->show();
 			glPopMatrix();
 		}
-		trains[n]->Render();
+		trains[n]->show();
 	glPopMatrix();
 }
 
@@ -161,7 +172,7 @@ void Train::setRandomTrain() {
 	posY = 0.1f;
 	dir = !dir;
 	if (!isBoss) {
-		HP = HPdelta + (rand() % 51);
+		HP = float(HPdelta + (rand() % 51));
 		*startHP = HP;
 	}
 

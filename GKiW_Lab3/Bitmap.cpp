@@ -1,40 +1,37 @@
-//File: Bitmap.cpp
-//Written by:     Mark Bernard
-//on GameDev.net: Captain Jester
-//e-mail: mark.bernard@rogers.com
-//Please feel free to use and abuse this code as much
-//as you like.  But, please give me some credit for
-//starting you off on the right track.
-//
-//The file Bitmap.h goes along with this file
-//
 #include "stdafx.h"
 #include "Bitmap.h"
 
 //basic constructor
-Bitmap::Bitmap() {
+Bitmap::Bitmap()
+{
 	reset();
 }
 
 //constructor loads the bitmap when it is created
-Bitmap::Bitmap(char *file) {
+Bitmap::Bitmap(char *file)
+{
 	reset();
 	loadBMP(file);
 }
 
 //destructor
-Bitmap::~Bitmap() {
-	if (colours != 0) {
+Bitmap::~Bitmap()
+{
+	if (colours != 0)
+	{
 		delete[] colours;
 	}
-	if (data != 0) {
+
+	if (data != 0)
+	{
 		delete[] data;
 	}
 }
 
 //load a bitmap from a file and represent it correctly
 //in memory
-bool Bitmap::loadBMP(char *file) {
+bool Bitmap::loadBMP(char *file)
+{
 	FILE *in;                  //file stream for reading
 	char *tempData;       //temp storage for image data
 	int numColours;            //total available colours
@@ -42,10 +39,13 @@ bool Bitmap::loadBMP(char *file) {
 							   //bitmap is not loaded yet
 	loaded = false;
 	//make sure memory is not lost
-	if (colours != 0) {
+	if (colours != 0)
+	{
 		delete[] colours;
 	}
-	if (data != 0) {
+
+	if (data != 0)
+	{
 		delete[] data;
 	}
 
@@ -53,7 +53,8 @@ bool Bitmap::loadBMP(char *file) {
 	in = fopen(file, "rb");
 
 	//if the file does not exist return in error
-	if (in == NULL) {
+	if (in == NULL)
+	{
 		error = "File not found";
 		fclose(in);
 		return false;
@@ -61,9 +62,10 @@ bool Bitmap::loadBMP(char *file) {
 
 	//read in the entire BITMAPFILEHEADER
 	fread(&bmfh, sizeof(BitmapFileHeader), 1, in);
-	cout << "sizeof(BitmapFileHeader)=" << sizeof(BitmapFileHeader) << endl;
+	std::cout << "sizeof(BitmapFileHeader)=" << sizeof(BitmapFileHeader) << std::endl;
 	//check for the magic number that says this is a bitmap
-	if (bmfh.bfType != BITMAP_MAGIC_NUMBER) {
+	if (bmfh.bfType != BITMAP_MAGIC_NUMBER)
+	{
 		error = "File is not in DIB format";
 		fclose(in);
 		return false;
@@ -71,7 +73,7 @@ bool Bitmap::loadBMP(char *file) {
 
 	//read in the entire BITMAPINFOHEADER
 	fread(&bmih, sizeof(BitmapInfoHeader), 1, in);
-	cout << "sizeof(BitmapInfoHeader)=" << sizeof(BitmapInfoHeader) << endl;
+	std::cout << "sizeof(BitmapInfoHeader)=" << sizeof(BitmapInfoHeader) << std::endl;
 
 	//save the width, height and bits per pixel for external use
 	width = bmih.biWidth;
@@ -86,14 +88,16 @@ bool Bitmap::loadBMP(char *file) {
 
 	//if the bitmap is not 8 bits per pixel or more
 	//return in error
-	if (bpp<8) {
+	if (bpp<8)
+	{
 		error = "File is not 8 or 24 bits per pixel";
 		fclose(in);
 		return false;
 	}
 
 	//load the palette for 8 bits per pixel
-	if (bpp == 8) {
+	if (bpp == 8)
+	{
 		colours = new RGBQuad[numColours];
 		fread(colours, sizeof(RGBQuad), numColours, in);
 	}
@@ -102,7 +106,8 @@ bool Bitmap::loadBMP(char *file) {
 	tempData = new char[dataSize];
 
 	//exit if there is not enough memory
-	if (tempData == NULL) {
+	if (tempData == NULL)
+	{
 		error = "Not enough memory to allocate a temporary buffer";
 		fclose(in);
 		return false;
@@ -118,15 +123,18 @@ bool Bitmap::loadBMP(char *file) {
 	byteWidth = padWidth = (int)((float)width*(float)bpp / 8.0);
 
 	//adjust the width for padding as necessary
-	while (padWidth % 4 != 0) {
+	while (padWidth % 4 != 0)
+	{
 		padWidth++;
 	}
 
 	//change format from GBR to RGB
-	if (bpp == 8) {
+	if (bpp == 8)
+	{
 		loaded = convert8(tempData);
 	}
-	else if (bpp == 24) {
+	else if (bpp == 24)
+	{
 		loaded = convert24(tempData);
 	}
 
@@ -141,14 +149,16 @@ bool Bitmap::loadBMP(char *file) {
 }
 
 //function to set the inital values
-void Bitmap::reset(void) {
+void Bitmap::reset(void)
+{
 	loaded = false;
 	colours = 0;
 	data = 0;
 	error = "";
 }
 
-bool Bitmap::convert24(char* tempData) {
+bool Bitmap::convert24(char* tempData)
+{
 	int offset, diff;
 
 	diff = width*height*RGB_BYTE_SIZE;
@@ -156,18 +166,22 @@ bool Bitmap::convert24(char* tempData) {
 	data = new char[diff];
 
 	//exit if there is not enough memory
-	if (data == NULL) {
+	if (data == NULL)
+	{
 		error = "Not enough memory to allocate an image buffer";
 		delete[] data;
 		return false;
 	}
 
-	if (height>0) {
+	if (height>0)
+	{
 		offset = padWidth - byteWidth;
 		//count backwards so you start at the front of the image
-		for (int i = 0; i<dataSize; i += 3) {
+		for (size_t i = 0; i < dataSize; i += 3)
+		{
 			//jump over the padding at the start of a new line
-			if ((i + 1) % padWidth == 0) {
+			if ((i + 1) % padWidth == 0)
+			{
 				i += offset;
 			}
 			//transfer the data
@@ -178,7 +192,8 @@ bool Bitmap::convert24(char* tempData) {
 	}
 
 	//image parser for a forward image
-	else {
+	else
+	{
 		offset = padWidth - byteWidth;
 		int j = dataSize - 3;
 		//count backwards so you start at the front of the image
@@ -186,9 +201,11 @@ bool Bitmap::convert24(char* tempData) {
 		//after the header  The only problem is that some programs
 		//will pad not only the data, but also the file size to
 		//be divisible by 4 bytes.
-		for (int i = 0; i<dataSize; i += 3) {
+		for (size_t i = 0; i<dataSize; i += 3)
+		{
 			//jump over the padding at the start of a new line
-			if ((i + 1) % padWidth == 0) {
+			if ((i + 1) % padWidth == 0)
+			{
 				i += offset;
 			}
 			//transfer the data
@@ -202,7 +219,8 @@ bool Bitmap::convert24(char* tempData) {
 	return true;
 }
 
-bool Bitmap::convert8(char* tempData) {
+bool Bitmap::convert8(char* tempData)
+{
 	int offset, diff;
 
 	diff = width*height*RGB_BYTE_SIZE;
@@ -210,19 +228,23 @@ bool Bitmap::convert8(char* tempData) {
 	data = new char[diff];
 
 	//exit if there is not enough memory
-	if (data == NULL) {
+	if (data == NULL)
+	{
 		error = "Not enough memory to allocate an image buffer";
 		delete[] data;
 		return false;
 	}
 
-	if (height>0) {
+	if (height>0)
+	{
 		offset = padWidth - byteWidth;
 		int j = 0;
 		//count backwards so you start at the front of the image
-		for (int i = 0; i<dataSize*RGB_BYTE_SIZE; i += 3) {
+		for (size_t i = 0; i<dataSize*RGB_BYTE_SIZE; i += 3)
+		{
 			//jump over the padding at the start of a new line
-			if ((i + 1) % padWidth == 0) {
+			if ((i + 1) % padWidth == 0)
+			{
 				i += offset;
 			}
 			//transfer the data
@@ -234,13 +256,16 @@ bool Bitmap::convert8(char* tempData) {
 	}
 
 	//image parser for a forward image
-	else {
+	else
+	{
 		offset = padWidth - byteWidth;
 		int j = dataSize - 1;
 		//count backwards so you start at the front of the image
-		for (int i = 0; i<dataSize*RGB_BYTE_SIZE; i += 3) {
+		for (size_t i = 0; i<dataSize*RGB_BYTE_SIZE; i += 3)
+		{
 			//jump over the padding at the start of a new line
-			if ((i + 1) % padWidth == 0) {
+			if ((i + 1) % padWidth == 0)
+			{
 				i += offset;
 			}
 			//transfer the data

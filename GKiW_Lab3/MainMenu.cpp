@@ -3,8 +3,8 @@
 #include "FunctionsPack.h"
 
 MainMenu::MainMenu() {
-	width = glutGet(GLUT_WINDOW_WIDTH);
-	height = glutGet(GLUT_WINDOW_HEIGHT);
+	width = float(glutGet(GLUT_WINDOW_WIDTH));
+	height = float(glutGet(GLUT_WINDOW_HEIGHT));
 
 	polygons[0].xmin = 0 + ((width / 2) - 272);
 	polygons[0].xmax = 545 + ((width / 2) - 272);
@@ -21,8 +21,8 @@ MainMenu::MainMenu() {
 	polygons[2].ymin = 422;
 	polygons[2].ymax = 480;
 
-	se = createIrrKlangDevice();
-	se->play2D("sounds/main.wav", true);
+	soundEngine = createIrrKlangDevice();
+	soundEngine->play2D("sounds/main.wav", true);
 
 	ilInit();
 	iluInit();
@@ -36,7 +36,7 @@ MainMenu::MainMenu() {
 
 
 MainMenu::~MainMenu(){
-	se->drop();
+	soundEngine->drop();
 }
 
 void MainMenu::show() {

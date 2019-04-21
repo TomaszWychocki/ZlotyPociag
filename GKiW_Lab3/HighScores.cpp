@@ -1,13 +1,16 @@
 #include "stdafx.h"
 #include "HighScores.h"
 
-HighScores::HighScores(){
+HighScores::HighScores() :
+	saved(false)
+{
 	getHighScores();
 
 	ilInit();
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
+
 	back = ilutGLLoadImage("images/wstecz.jpg");
 	bg = ilutGLLoadImage("images/menu_2.jpg");
 }
@@ -17,42 +20,51 @@ HighScores::~HighScores()
 {
 }
 
-void HighScores::saveScore(int points) {
-	if (!saved) {
+void HighScores::saveScore(int points)
+{
+	if (!saved)
+	{
 		saved = true;
 		int n = getNumber();
 
-		ofstream scores;
-		scores.open("scores.txt", ios::app);
+		std::ofstream scores;
+		scores.open("scores.txt", std::ios::app);
 		scores << n << " " << points << "\n";
 		scores.close();
 	}
 }
 
-void HighScores::getHighScores() {
-	ifstream scores;
+void HighScores::getHighScores()
+{
+	std::ifstream scores;
 	int player, points;
 	scores.open("scores.txt");
 	sc.clear();
 
-	while (scores >> player >> points) {
-		sc.push_back(make_pair(player, points));
+	while (scores >> player >> points)
+	{
+		sc.push_back(std::make_pair(player, points));
 	}
 
-	for (int i = 0; i < sc.size(); i++) {
-		for (int j = 0; j < sc.size() - 1; j++) {
+	for (size_t i = 0; i < sc.size(); i++)
+	{
+		for (size_t j = 0; j < sc.size() - 1; j++)
+		{
 			if (sc[j].second < sc[j + 1].second)
+			{
 				swap(sc[j], sc[j + 1]);
+			}
 		}
 	}
 
 	scores.close();
 }
 
-void HighScores::Render(){
+void HighScores::show()
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
+	float width = float(glutGet(GLUT_WINDOW_WIDTH));
+	float height = float(glutGet(GLUT_WINDOW_HEIGHT));
 	glMatrixMode(GL_PROJECTION);
 	glColor3f(1, 1, 1);
 	glDisable(GL_LIGHTING);
@@ -90,25 +102,36 @@ void HighScores::Render(){
 	glEnable(GL_LIGHTING);
 	glMatrixMode(GL_MODELVIEW);
 
-	for (size_t i = 0; i < sc.size(); i++) {
-		printText(200, (i*35) + 50, 3, "[GRACZ " + std::to_string(sc[i].first) + "] PUNKTY: " + std::to_string(sc[i].second), 1, 1, 0);
+	for (size_t i = 0; i < sc.size(); i++)
+	{
+		printText(200.0f, (i * 35.0f) + 50.0f, 3, "[GRACZ " + std::to_string(sc[i].first) + "] PUNKTY: " + std::to_string(sc[i].second), 1, 1, 0);
 	}
 }
 
-int HighScores::getNumber() {
-	ifstream scores;
+int HighScores::getNumber()
+{
+	std::ifstream scores;
 	scores.open("scores.txt");
-	string line;
+	std::string line;
 	int i = 1;
+
 	while (getline(scores, line))
+	{
 		i++;
+	}
 	scores.close();
+
 	return i;
 }
 
-int HighScores::checkItems(int x, int y) {
-	if ((y >= glutGet(GLUT_WINDOW_HEIGHT) - (35 + 64)) && (y<= glutGet(GLUT_WINDOW_HEIGHT) - 35) && (x >= 35) && (x <= 293))
+int HighScores::checkItems(int x, int y)
+{
+	if ((y >= glutGet(GLUT_WINDOW_HEIGHT) - (35 + 64)) && (y <= glutGet(GLUT_WINDOW_HEIGHT) - 35) && (x >= 35) && (x <= 293))
+	{
 		return 1;
+	}
 	else
+	{
 		return -1;
+	}
 }

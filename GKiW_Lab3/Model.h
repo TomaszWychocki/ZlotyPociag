@@ -9,15 +9,11 @@ struct SFace {
 	int t[3];
 };
 
-struct vec3 {
-	float x, y, z;
-};
-
 class Model {
 public:
 	Model(char*, char*);
 	~Model();
-	void Render();
+	void show();
 
 private:
 	void LoadObj(char*);

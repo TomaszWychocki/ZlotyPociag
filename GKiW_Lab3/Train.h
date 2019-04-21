@@ -1,9 +1,12 @@
 #pragma once
 #include "Model.h"
-#include <irrKlang.h>
-#include <vector>
 #include "Particle.h" 
 #include "FunctionsPack.h"
+#include "Vector3.h"
+#include "Point.h"
+#include <irrKlang.h>
+#include <vector>
+
 
 class Train
 {
@@ -16,7 +19,7 @@ public:
 	~Train();
 	void LoadModels();
 	void Calculate();
-	void Render();
+	void show();
 	void setDefault(int);
 	void showTrainByNumber(int);
 	float HP;
@@ -28,13 +31,13 @@ public:
 	float playerPosZ;
 	float posX;
 	bool dir = false;
-	vec3 shootDir;
-	vec3 startPos;
+	Vector3 shootDir;
+	Point startPos;
 
 private:
 	Model *trains[4]; //Normal, blue, green, gold
 	Model *trainCannon;
-	irrklang::ISoundEngine* se;
+	irrklang::ISoundEngine* soundEngine;
 	void setRandomTrain();
 	int currentTrain = 0;
 	float timer;

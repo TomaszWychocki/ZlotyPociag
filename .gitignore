@@ -7,4 +7,6 @@
 /GKiW_Lab3.VC.db
 /GKiW_Lab3.VC.VC.opendb
 /GKiW_Lab3/Debug/*
+/GKiW_Lab3/Release/*
 *.ipch
+.vs/
